@@ -29,7 +29,7 @@ program
   .option('-t, --template <name>', 'Template name (modern, classic)', 'classic')
   .option('-f, --format <format>', 'Output format (pdf, html)', 'pdf')
   .option('--validate', 'Run ATS validation', false)
-  .option('--spacing <mode>', 'Spacing mode: auto (default), compact, normal', 'auto')
+  .option('--spacing <mode>', 'Spacing mode: auto (default), compact, normal', 'compact')
   .option('--compact', 'Use compact spacing (shorthand for --spacing compact)', false)
   .option('-v, --verbose', 'Enable verbose logging', false)
   .action(async (options) => {

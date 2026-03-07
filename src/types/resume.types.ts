@@ -39,6 +39,8 @@ export interface Experience {
   location: string;
   /** List of achievement/description bullet points */
   bulletPoints: string[];
+  /** Whether this experience entry is disabled (optional) */
+  disabled?: boolean;
 }
 
 /**
@@ -57,6 +59,8 @@ export interface Education {
   gpa?: string;
   /** Honors or distinctions (optional) */
   honors?: string[];
+  /** Whether this education entry is disabled (optional) */
+  disabled?: boolean;
 }
 
 /**
@@ -67,6 +71,8 @@ export interface SkillCategory {
   name: string;
   /** List of skills in this category */
   items: string[];
+  /** Whether this skill category is disabled (optional) */
+  disabled?: boolean;
 }
 
 /**
@@ -91,6 +97,8 @@ export interface Certification {
   expirationDate?: string;
   /** Credential ID or certificate number (optional) */
   credentialId?: string;
+  /** Whether this certification is disabled (optional) */
+  disabled?: boolean;
 }
 
 /**
@@ -109,6 +117,8 @@ export interface Project {
   github?: string;
   /** Date completed in YYYY-MM format (optional) */
   date?: string;
+  /** Whether this project is disabled (optional) */
+  disabled?: boolean;
 }
 
 /**
@@ -119,6 +129,8 @@ export interface Language {
   name: string;
   /** Proficiency level (e.g., "Native", "Fluent", "Conversational") */
   proficiency: string;
+  /** Whether this language entry is disabled (optional) */
+  disabled?: boolean;
 }
 
 /**
@@ -133,6 +145,24 @@ export interface Award {
   date: string;
   /** Description (optional) */
   description?: string;
+  /** Whether this award is disabled (optional) */
+  disabled?: boolean;
+}
+
+/**
+ * Course entry
+ */
+export interface Course {
+  /** Course number (e.g., "CS 101") */
+  courseNumber: string;
+  /** Course title (e.g., "Introduction to Computer Science") */
+  title: string;
+  /** Semester taken (optional, e.g., "Fall 2023", "Spring 2024") */
+  semester?: string;
+  /** Grade received (optional, e.g., "A", "A-", "B+") */
+  grade?: string;
+  /** Whether this course is disabled (optional) */
+  disabled?: boolean;
 }
 
 /**
@@ -170,6 +200,8 @@ export interface Resume {
   languages?: SectionOrFile<Language[]>;
   /** Awards - can be array or file reference (optional) */
   awards?: SectionOrFile<Award[]>;
+  /** Courses - can be array or file reference (optional) */
+  courses?: SectionOrFile<Course[]>;
 }
 
 /**

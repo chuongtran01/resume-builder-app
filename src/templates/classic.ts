@@ -56,6 +56,7 @@ export const classicTemplate: ResumeTemplate = {
     ${resume.projects ? renderProjects(resume.projects) : ''}
     ${resume.languages ? renderLanguages(resume.languages) : ''}
     ${resume.awards ? renderAwards(resume.awards) : ''}
+    ${resume.courses ? renderCourses(resume.courses) : ''}
   </div>
 </body>
 </html>`;
@@ -82,11 +83,11 @@ function getCss(options?: TemplateOptions, spacing: 'compact' | 'normal' = 'comp
   const spacingPresets = {
     compact: {
       bodyPadding: '0.35in',
-      bodyFontSize: '9pt',
+      bodyFontSize: '9.5pt',
       lineHeight: '1.25',
       headerMarginBottom: '8pt',
       headerPaddingBottom: '2pt',
-      headerH1FontSize: '16pt',
+      headerH1FontSize: '20pt',
       headerH1MarginBottom: '2pt',
       headerContactFontSize: '8pt',
       headerContactSpanMargin: '0 2pt',
@@ -94,26 +95,17 @@ function getCss(options?: TemplateOptions, spacing: 'compact' | 'normal' = 'comp
       sectionTitleFontSize: '11pt',
       sectionTitleMarginBottom: '4pt',
       sectionTitlePaddingBottom: '2pt',
-      summaryFontSize: '10pt',
       summaryLineHeight: '1.3',
       summaryMarginBottom: '10pt',
       experienceItemMarginBottom: '6pt',
       experienceHeaderMarginBottom: '2pt',
-      experienceTitleFontSize: '11pt',
-      experienceCompanyFontSize: '10pt',
-      experienceDatesFontSize: '9pt',
       bulletMarginTop: '2pt',
       bulletMarginLeft: '16pt',
       bulletMarginBottom: '0.5pt',
-      bulletFontSize: '10pt',
       skillsCategoriesMarginTop: '4pt',
       skillCategoryMarginBottom: '0.5pt',
-      skillCategoryNameFontSize: '10pt',
       skillCategoryNameMarginBottom: '2pt',
-      skillItemsFontSize: '10pt',
       certificationItemMarginBottom: '5pt',
-      certificationNameFontSize: '10pt',
-      certificationIssuerFontSize: '10pt',
       certificationIssuerMarginTop: '1pt',
     },
     normal: {
@@ -130,26 +122,17 @@ function getCss(options?: TemplateOptions, spacing: 'compact' | 'normal' = 'comp
       sectionTitleFontSize: '14pt',
       sectionTitleMarginBottom: '10pt',
       sectionTitlePaddingBottom: '4pt',
-      summaryFontSize: '11pt',
       summaryLineHeight: '1.6',
       summaryMarginBottom: '16pt',
       experienceItemMarginBottom: '12pt',
       experienceHeaderMarginBottom: '4pt',
-      experienceTitleFontSize: '12pt',
-      experienceCompanyFontSize: '11pt',
-      experienceDatesFontSize: '10pt',
       bulletMarginTop: '6pt',
       bulletMarginLeft: '20pt',
       bulletMarginBottom: '2pt',
-      bulletFontSize: '11pt',
       skillsCategoriesMarginTop: '8pt',
       skillCategoryMarginBottom: '2pt',
-      skillCategoryNameFontSize: '11pt',
       skillCategoryNameMarginBottom: '4pt',
-      skillItemsFontSize: '11pt',
       certificationItemMarginBottom: '8pt',
-      certificationNameFontSize: '11pt',
-      certificationIssuerFontSize: '11pt',
       certificationIssuerMarginTop: '2pt',
     },
   };
@@ -411,6 +394,7 @@ function renderExperience(experience: Resume['experience']): string {
   }
 
   const items = experience
+    .filter((exp) => !exp.disabled)
     .map((exp) => {
       const bulletPoints = exp.bulletPoints
         .map((bullet) => `<li>${escapeHtml(bullet)}</li>`)
@@ -453,9 +437,13 @@ function renderEducation(education: Resume['education']): string {
   let educationItems: string[] = [];
 
   if (isSingleEducation(education)) {
-    educationItems = [renderEducationItem(education)];
+    if (!education.disabled) {
+      educationItems = [renderEducationItem(education)];
+    }
   } else if (isEducationArray(education)) {
-    educationItems = education.map((edu) => renderEducationItem(edu));
+    educationItems = education
+      .filter((edu) => !edu.disabled)
+      .map((edu) => renderEducationItem(edu));
   }
 
   if (educationItems.length === 0) {
@@ -512,6 +500,7 @@ function renderSkills(skills: Resume['skills']): string {
   }
 
   const categories = skills.categories
+    .filter((category) => !category.disabled)
     .map((category) => {
       const items = category.items.map((item) => escapeHtml(item)).join(', ');
       return `
@@ -542,6 +531,7 @@ function renderCertifications(certifications: Resume['certifications']): string 
   }
 
   const items = certifications
+    .filter((cert) => !cert.disabled)
     .map((cert) => {
       const dateInfo = cert.expirationDate
         ? `${formatDate(cert.date)} - ${formatDate(cert.expirationDate)}`
@@ -576,6 +566,7 @@ function renderProjects(projects: Resume['projects']): string {
   }
 
   const items = projects
+    .filter((project) => !project.disabled)
     .map((project) => {
       const links: string[] = [];
       if (project.url) {
@@ -618,20 +609,25 @@ function renderLanguages(languages: Resume['languages']): string {
     return '';
   }
 
-  const items = languages
+  const enabledLanguages = languages.filter((lang) => !lang.disabled);
+  
+  if (enabledLanguages.length === 0) {
+    return '';
+  }
+
+  const languagesText = enabledLanguages
     .map((lang) => {
-      return `
-        <div class="language-item">
-          <strong>${escapeHtml(lang.name)}</strong> - ${escapeHtml(lang.proficiency)}
-        </div>
-      `;
+      if (lang.proficiency) {
+        return `${escapeHtml(lang.name)} (${escapeHtml(lang.proficiency)})`;
+      }
+      return escapeHtml(lang.name);
     })
-    .join('');
+    .join(', ');
 
   return `
     <div class="section">
       <h2 class="section-title">Languages</h2>
-      ${items}
+      <div class="language-item">${languagesText}</div>
     </div>
   `;
 }
@@ -645,6 +641,7 @@ function renderAwards(awards: Resume['awards']): string {
   }
 
   const items = awards
+    .filter((award) => !award.disabled)
     .map((award) => {
       return `
         <div class="award-item">
@@ -662,6 +659,46 @@ function renderAwards(awards: Resume['awards']): string {
     <div class="section">
       <h2 class="section-title">Awards</h2>
       ${items}
+    </div>
+  `;
+}
+
+/**
+ * Render courses section
+ */
+function renderCourses(courses: Resume['courses']): string {
+  if (!courses || !Array.isArray(courses)) {
+    return '';
+  }
+
+  const items = courses
+    .filter((course) => !course.disabled)
+    .map((course) => {
+      const courseName = `${escapeHtml(course.courseNumber)} - ${escapeHtml(course.title)}`;
+      const parts: string[] = [];
+      
+      if (course.semester) {
+        parts.push(`Semester: ${escapeHtml(course.semester)}`);
+      }
+      
+      if (course.grade) {
+        parts.push(`Grade Achieved: ${escapeHtml(course.grade)}`);
+      }
+      
+      const fullLine = parts.length > 0
+        ? `${courseName} | ${parts.join(' | ')}`
+        : courseName;
+
+      return `<li>${fullLine}</li>`;
+    })
+    .join('');
+
+  return `
+    <div class="section">
+      <h2 class="section-title">Relevant Coursework</h2>
+      <ul class="bullet-points">
+        ${items}
+      </ul>
     </div>
   `;
 }
