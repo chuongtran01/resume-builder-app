@@ -138,7 +138,7 @@ function loadFromEnvironment(): Partial<AIConfig> {
   if (geminiApiKey) {
     config.providers!.gemini = {
       apiKey: geminiApiKey,
-      model: (getEnvVar(ENV_VARS.GEMINI_MODEL) as 'gemini-2.5-pro' | 'gemini-3-flash-preview') || 'gemini-2.5-pro',
+      model: (getEnvVar(ENV_VARS.GEMINI_MODEL) as 'gemini-2.5-pro' | 'gemini-3-flash-preview') || 'gemini-3-flash-preview',
     };
 
     // Optional Gemini settings
@@ -244,7 +244,7 @@ function mergeConfigs(
       // Ensure apiKey is present (file takes precedence)
       apiKey: (fileGemini?.apiKey || envGemini?.apiKey || '') as string,
       // Ensure model is present (file takes precedence)
-      model: (fileGemini?.model || envGemini?.model || 'gemini-2.5-pro') as 'gemini-2.5-pro' | 'gemini-3-flash-preview',
+      model: (fileGemini?.model || envGemini?.model || 'gemini-3-flash-preview') as 'gemini-2.5-pro' | 'gemini-3-flash-preview',
     };
   }
 
@@ -290,7 +290,7 @@ function validateConfig(config: AIConfig): ConfigValidationResult {
     }
 
     // Validate model
-    const validModels = ['gemini-2.5-pro', 'gemini-3-flash-preview'];
+    const validModels = ['gemini-3-flash-preview', 'gemini-2.5-pro'];
     if (geminiConfig.model && !validModels.includes(geminiConfig.model)) {
       errors.push(`Invalid Gemini model: ${geminiConfig.model}. Must be one of: ${validModels.join(', ')}`);
     }

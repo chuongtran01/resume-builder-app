@@ -495,7 +495,7 @@ Enhance a resume based on a job description. This endpoint analyzes the job desc
     "maxSuggestions": 10
   },
   "aiProvider": "gemini",
-  "aiModel": "gemini-2.5-pro",
+  "aiModel": "gemini-3-flash-preview",
   "aiOptions": {
     "temperature": 0.7,
     "maxTokens": 2000,
@@ -513,7 +513,7 @@ Enhance a resume based on a job description. This endpoint analyzes the job desc
   - `tone` - Enhancement tone: `"professional" | "technical" | "leadership"`
   - `maxSuggestions` - Maximum number of suggestions to return
 - `aiProvider` (optional) - AI provider to use: `"gemini"` (default: uses configured default provider)
-- `aiModel` (optional) - AI model to use: `"gemini-2.5-pro"` (default) or `"gemini-3-flash-preview"`
+- `aiModel` (optional) - AI model to use: `"gemini-3-flash-preview"` (default) or `"gemini-2.5-pro"`
 - `aiOptions` (optional) - AI provider-specific options:
   - `temperature` - Temperature (0-1) for creativity control (default: 0.7)
   - `maxTokens` - Maximum tokens to generate (default: 2000)
@@ -556,7 +556,7 @@ Enhance a resume based on a job description. This endpoint analyzes the job desc
   "provider": {
     "name": "gemini",
     "displayName": "Google Gemini",
-    "model": "gemini-2.5-pro",
+    "model": "gemini-3-flash-preview",
     "temperature": 0.7
   },
   "pdf": {
@@ -721,7 +721,7 @@ const response = await fetch('http://localhost:3000/api/enhanceResume', {
       tone: 'professional',
     },
     aiProvider: 'gemini',
-    aiModel: 'gemini-2.5-pro',
+    aiModel: 'gemini-3-flash-preview',
     aiOptions: {
       temperature: 0.7,
       maxTokens: 2000,

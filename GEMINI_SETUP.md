@@ -6,8 +6,8 @@ This guide provides detailed instructions for setting up and using Google Gemini
 
 The resume builder uses Google Gemini AI models to enhance resumes based on job descriptions. The system supports two models:
 
-- **`gemini-2.5-pro`** (default) - Best quality, recommended for production use
-- **`gemini-3-flash-preview`** - Faster and more cost-effective, good for testing and high-volume use
+- **`gemini-3-flash-preview`** (default) - Faster and more cost-effective, recommended for most use cases
+- **`gemini-2.5-pro`** - Higher quality, best for production use when quality is paramount
 
 ## Prerequisites
 
@@ -40,8 +40,8 @@ GEMINI_API_KEY=your-api-key-here
 ### Step 3: (Optional) Configure Model and Settings
 
 ```env
-# Use gemini-2.5-pro (default) for best quality
-GEMINI_MODEL=gemini-2.5-pro
+# Use gemini-3-flash-preview (default) for faster/cheaper, or gemini-2.5-pro for best quality
+GEMINI_MODEL=gemini-3-flash-preview
 
 # Or use gemini-3-flash-preview for faster/cheaper
 # GEMINI_MODEL=gemini-3-flash-preview
@@ -69,7 +69,25 @@ npm run dev -- enhanceResume \
 
 ## Model Selection
 
-### gemini-2.5-pro (Recommended)
+### gemini-3-flash-preview (Default, Recommended)
+
+**Best for:** Most use cases, testing, high-volume processing, cost-sensitive use
+
+**Characteristics:**
+- Fast response times
+- Lower cost per request
+- Good quality output
+- Higher rate limits
+- Suitable for batch processing
+
+**When to use:**
+- Testing and development
+- Processing multiple resumes
+- When speed is important
+- Cost-sensitive scenarios
+- Most production use cases
+
+### gemini-2.5-pro
 
 **Best for:** Production use, high-quality enhancements
 
@@ -84,23 +102,6 @@ npm run dev -- enhanceResume \
 - Final resume preparation
 - Important job applications
 - When quality is paramount
-
-### gemini-3-flash-preview
-
-**Best for:** Testing, high-volume processing, cost-sensitive use
-
-**Characteristics:**
-- Fast response times
-- Lower cost per request
-- Good quality output
-- Higher rate limits
-- Suitable for batch processing
-
-**When to use:**
-- Testing and development
-- Processing multiple resumes
-- When speed is important
-- Cost-sensitive scenarios
 
 ## Configuration Options
 
@@ -155,7 +156,7 @@ npm run dev -- enhanceResume \
 
 ### 2. Use Appropriate Model
 
-- Use `gemini-2.5-pro` for final resumes
+- Use `gemini-3-flash-preview` for most use cases (default), or `gemini-2.5-pro` for final resumes when quality is critical
 - Use `gemini-3-flash-preview` for testing and iterations
 
 ### 3. Monitor API Usage
@@ -256,7 +257,7 @@ GEMINI_MAX_TOKENS=1500
 
 **Production:**
 ```env
-GEMINI_MODEL=gemini-2.5-pro
+GEMINI_MODEL=gemini-3-flash-preview
 GEMINI_TEMPERATURE=0.7
 GEMINI_MAX_TOKENS=2000
 GEMINI_TIMEOUT=60000

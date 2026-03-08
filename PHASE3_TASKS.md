@@ -943,7 +943,7 @@ enhanceResume \
   --input resume.json \
   --job job-description.txt \
   --ai-provider gemini \
-  --ai-model gemini-2.5-pro \
+  --ai-model gemini-3-flash-preview \
   --ai-temperature 0.7 \
   --output ./output
 ```
@@ -998,7 +998,7 @@ Update the API `/api/enhanceResume` endpoint to support AI provider selection an
     "focusAreas": ["bulletPoints"]
   },
   "aiProvider": "gemini",
-  "aiModel": "gemini-2.5-pro",
+  "aiModel": "gemini-3-flash-preview",
   "aiOptions": {
     "temperature": 0.7,
     "maxTokens": 2000,

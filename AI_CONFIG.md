@@ -28,7 +28,7 @@ export GEMINI_API_KEY="your-api-key-here"
 export DEFAULT_AI_PROVIDER="gemini"
 
 # Gemini model selection
-export GEMINI_MODEL="gemini-2.5-pro"  # Options: gemini-2.5-pro, gemini-3-flash-preview
+export GEMINI_MODEL="gemini-3-flash-preview"  # Options: gemini-3-flash-preview, gemini-2.5-pro
 
 # Gemini parameters
 export GEMINI_TEMPERATURE="0.7"        # 0.0 to 1.0 (creativity control)
@@ -45,7 +45,7 @@ export ENHANCEMENT_MODE="sequential"   # sequential or agent
 # In ~/.bashrc or ~/.zshrc
 export GEMINI_API_KEY="your-api-key-here"
 export DEFAULT_AI_PROVIDER="gemini"
-export GEMINI_MODEL="gemini-2.5-pro"
+export GEMINI_MODEL="gemini-3-flash-preview"
 ```
 
 ### Example: Using in a script
@@ -93,7 +93,7 @@ You can customize other settings in `.env`:
 
 ```env
 GEMINI_API_KEY=your-api-key-here
-GEMINI_MODEL=gemini-2.5-pro
+GEMINI_MODEL=gemini-3-flash-preview
 GEMINI_TEMPERATURE=0.7
 GEMINI_MAX_TOKENS=2000
 GEMINI_TIMEOUT=30000
@@ -121,12 +121,11 @@ ENHANCEMENT_MODE=sequential
 - **Security:** Use environment variable reference: `"${GEMINI_API_KEY}"`
 
 ### `providers.gemini.model`
-- **Type:** `"gemini-2.5-pro" | "gemini-2.5-pro" | "gemini-3-flash-preview"`
-- **Default:** `"gemini-2.5-pro"`
+- **Type:** `"gemini-3-flash-preview" | "gemini-2.5-pro"`
+- **Default:** `"gemini-3-flash-preview"`
 - **Description:** Which Gemini model to use
-  - `gemini-2.5-pro`: Original model
-  - `gemini-2.5-pro`: Latest Pro model (recommended)
-  - `gemini-3-flash-preview`: Faster, cheaper model
+  - `gemini-3-flash-preview`: Faster, cheaper model (default, recommended)
+  - `gemini-2.5-pro`: Higher quality model for production use
 
 ### `providers.gemini.temperature`
 - **Type:** `number` (0.0 to 1.0)
@@ -201,7 +200,7 @@ Configuration is loaded from `.env` file automatically. Priority order:
 3. **Defaults** (if neither is set)
 
 **Example:**
-- `.env`: `GEMINI_MODEL=gemini-2.5-pro`
+- `.env`: `GEMINI_MODEL=gemini-3-flash-preview`
 - CLI: `--ai-model gemini-3-flash-preview`
 - **Result:** `gemini-3-flash-preview` (CLI option wins)
 
@@ -276,7 +275,7 @@ The configuration is automatically validated when loaded. Common validation erro
 # Set environment variables
 export GEMINI_API_KEY="your-key-here"
 export DEFAULT_AI_PROVIDER="gemini"
-export GEMINI_MODEL="gemini-2.5-pro"
+export GEMINI_MODEL="gemini-3-flash-preview"
 
 # Basic usage (uses defaults from environment)
 npm run cli -- enhanceResume --input resume.json --job job.txt
@@ -319,7 +318,7 @@ cp .env.example .env
 
 # 2. Edit .env with all your settings
 # GEMINI_API_KEY=your-key-here
-# GEMINI_MODEL=gemini-2.5-pro
+# GEMINI_MODEL=gemini-3-flash-preview
 # GEMINI_TEMPERATURE=0.7
 # GEMINI_MAX_TOKENS=2000
 # GEMINI_TIMEOUT=30000
@@ -343,7 +342,7 @@ npm run cli -- enhanceResume \
 
 ### Basic Usage (All Defaults)
 
-Uses default AI provider (`gemini`), model (`gemini-2.5-pro`), and temperature (`0.7`):
+Uses default AI provider (`gemini`), model (`gemini-3-flash-preview`), and temperature (`0.7`):
 
 ```bash
 npm run cli -- enhanceResume \
@@ -375,7 +374,7 @@ npm run cli -- enhanceResume \
   --template classic \
   --format pdf \
   --ai-provider gemini \
-  --ai-model gemini-2.5-pro \
+  --ai-model gemini-3-flash-preview \
   --ai-temperature 0.7 \
   --verbose
 ```

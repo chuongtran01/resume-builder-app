@@ -416,7 +416,7 @@ program
   .option('-t, --template <name>', 'Template name (modern, classic)', 'classic')
   .option('-f, --format <format>', 'Output format (pdf, html)', 'pdf')
   .option('--ai-provider <provider>', 'AI provider to use (default: gemini)', 'gemini')
-  .option('--ai-model <model>', 'AI model to use: gemini-2.5-pro (default) or gemini-3-flash-preview')
+  .option('--ai-model <model>', 'AI model to use: gemini-3-flash-preview (default) or gemini-2.5-pro')
   .option('--ai-temperature <temp>', 'AI temperature 0-1 (default: 0.7)', parseFloat)
   .option('-v, --verbose', 'Enable verbose logging', false)
   .action(async (options) => {
@@ -509,9 +509,9 @@ program
       }
 
       // Validate AI model if provided
-      if (options.aiModel && !['gemini-2.5-pro', 'gemini-3-flash-preview'].includes(options.aiModel)) {
+      if (options.aiModel && !['gemini-3-flash-preview', 'gemini-2.5-pro'].includes(options.aiModel)) {
         logger.error(`❌ Error: Invalid AI model "${options.aiModel}"`);
-        logger.info('💡 Valid models are: gemini-2.5-pro, gemini-3-flash-preview');
+        logger.info('💡 Valid models are: gemini-3-flash-preview, gemini-2.5-pro');
         process.exit(1);
       }
 
@@ -582,9 +582,9 @@ program
           process.exit(1);
         }
 
-        // Use defaults: model from config (default: gemini-2.5-pro), temperature from config (default: 0.7)
+        // Use defaults: model from config (default: gemini-3-flash-preview), temperature from config (default: 0.7)
         // Override with CLI options if provided
-        const DEFAULT_MODEL: 'gemini-2.5-pro' | 'gemini-3-flash-preview' = 'gemini-2.5-pro';
+        const DEFAULT_MODEL: 'gemini-2.5-pro' | 'gemini-3-flash-preview' = 'gemini-3-flash-preview';
         const DEFAULT_TEMPERATURE = 0.7;
 
         const finalConfig = {

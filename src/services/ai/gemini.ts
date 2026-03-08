@@ -243,8 +243,8 @@ export class GeminiProvider implements AIProvider {
     return {
       name: 'gemini',
       displayName: 'Google Gemini',
-      supportedModels: ['gemini-2.5-pro', 'gemini-3-flash-preview'],
-      defaultModel: 'gemini-2.5-pro',
+      supportedModels: ['gemini-3-flash-preview', 'gemini-2.5-pro'],
+      defaultModel: 'gemini-3-flash-preview',
       version: '2.0.0', // Updated for new SDK
     };
   }

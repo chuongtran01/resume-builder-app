@@ -213,7 +213,7 @@ export function registerRoutes(app: Express): void {
             maxSuggestions?: number;
           };
           aiProvider?: 'gemini';
-          aiModel?: 'gemini-2.5-pro' | 'gemini-3-flash-preview';
+          aiModel?: 'gemini-3-flash-preview' | 'gemini-2.5-pro';
           aiOptions?: {
             temperature?: number;
             maxTokens?: number;
@@ -258,7 +258,7 @@ export function registerRoutes(app: Express): void {
         // Merge base config with request overrides
         const finalGeminiConfig = {
           ...baseGeminiConfig,
-          model: aiModel || baseGeminiConfig.model || 'gemini-2.5-pro',
+          model: aiModel || baseGeminiConfig.model || 'gemini-3-flash-preview',
           temperature: aiOptions?.temperature !== undefined ? aiOptions.temperature : (baseGeminiConfig.temperature ?? 0.7),
           maxTokens: aiOptions?.maxTokens !== undefined ? aiOptions.maxTokens : baseGeminiConfig.maxTokens,
           timeout: aiOptions?.timeout !== undefined ? aiOptions.timeout : baseGeminiConfig.timeout,

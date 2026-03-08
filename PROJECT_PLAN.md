@@ -141,7 +141,7 @@ The AI enhancement process uses extracted information from the job description t
    - Validation layer ensures no fabrication
 
 **Supported AI Model:**
-- **Google Gemini** - Via Google AI API (gemini-2.5-pro, gemini-3-flash-preview)
+- **Google Gemini** - Via Google AI API (gemini-3-flash-preview, gemini-2.5-pro)
 
 **Deliverables:**
 - AI provider abstraction layer (`src/services/ai/`)
@@ -189,7 +189,7 @@ The AI enhancement process uses extracted information from the job description t
 ```typescript
 {
   aiProvider: 'gemini',
-  model: 'gemini-2.5-pro' | 'gemini-3-flash-preview',
+  model: 'gemini-3-flash-preview' | 'gemini-2.5-pro',
   apiKey: string,
   temperature: number, // 0-1 for creativity control
   maxTokens: number,
