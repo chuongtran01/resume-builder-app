@@ -5,15 +5,26 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --radius: 0px;
+    --border: #D6D0C8;
+    --input: #D6D0C8;
+    --ring: #C4622D;
+    --background: #FAF9F6;
+    --foreground: #1A1714;
+    --primary: #C4622D;
+    --primary-foreground: #ffffff;
+  }
+
   * {
     @apply border-border;
   }
-  
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: 'kern' 1, 'liga' 1;
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif;
   }
