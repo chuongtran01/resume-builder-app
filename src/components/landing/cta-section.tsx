@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { fadeInUp, animationViewport } from '@/components/landing/animations';
 
 interface CTASectionProps {
@@ -45,9 +46,12 @@ export function CTASection({
           viewport={animationViewport}
           variants={fadeInUp}
         >
-          <button className="bg-accent text-white px-8 py-3 rounded-sm font-sans text-sm hover:opacity-90 transition-opacity">
+          <Link
+            href="/builder"
+            className="inline-block bg-accent text-white px-8 py-3 rounded-sm font-sans text-sm hover:opacity-90 transition-opacity"
+          >
             {buttonText}
-          </button>
+          </Link>
         </motion.div>
       </div>
     </section>

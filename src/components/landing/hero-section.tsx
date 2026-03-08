@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { ResumeMockup } from '@/components/resume-mockup';
 import { fadeInUp } from '@/components/landing/animations';
 
@@ -24,9 +25,12 @@ export function HeroSection() {
               Craft uses AI to translate your experience into clear, compelling language — tailored to every role you apply for.
             </p>
             <div className="space-y-3">
-              <button className="bg-accent text-white px-8 py-3 rounded-sm font-sans text-sm hover:opacity-90 transition-opacity">
+              <Link
+                href="/builder"
+                className="inline-block bg-accent text-white px-8 py-3 rounded-sm font-sans text-sm hover:opacity-90 transition-opacity"
+              >
                 Build Your Resume
-              </button>
+              </Link>
               <p className="text-sm text-foreground/50 font-sans">
                 Free to start. No credit card required.
               </p>
