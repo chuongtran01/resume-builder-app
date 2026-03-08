@@ -12,24 +12,12 @@ import { PdfGenerationError } from '@utils/pdfGenerator';
 import { validateRequestBody, createErrorResponse, createFileResponse } from '@/app/api/helpers';
 import { generateResumeRequestSchema } from '@/app/api/schemas';
 import type { Resume } from '@resume-types/resume.types';
+import { z } from 'zod';
 
 /**
- * Type for validated generate resume request body
+ * Type for validated generate resume request body (inferred from schema)
  */
-type GenerateResumeRequestBody = {
-  resume: Resume;
-  options?: {
-    template?: string;
-    format?: 'pdf' | 'html';
-    validate?: boolean;
-    templateOptions?: {
-      pageBreaks?: boolean;
-      customCss?: string;
-      printStyles?: boolean;
-      multiplier?: number;
-    };
-  };
-};
+type GenerateResumeRequestBody = z.infer<typeof generateResumeRequestSchema>;
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
@@ -59,7 +47,8 @@ export async function POST(request: NextRequest) {
     const outputPath = path.join(tempDir, outputFileName);
 
     // Generate resume
-    const result = await generateResumeFromObject(resume, outputPath, {
+    // Cast to Resume type - schema validation ensures compatibility
+    const result = await generateResumeFromObject(resume as Resume, outputPath, {
       template,
       format,
       validate: runValidation,

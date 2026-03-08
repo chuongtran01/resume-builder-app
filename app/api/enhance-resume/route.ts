@@ -2,7 +2,7 @@
  * POST /api/enhance-resume - Enhance resume based on job description
  */
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as os from 'os';
@@ -11,6 +11,12 @@ import { validateRequestBody, createErrorResponse } from '@/app/api/helpers';
 import { enhanceResumeRequestSchema } from '@/app/api/schemas';
 import { generateResumeFromObject } from '@services/resumeGenerator';
 import type { Resume } from '@resume-types/resume.types';
+import { z } from 'zod';
+
+/**
+ * Type for validated request body (inferred from schema)
+ */
+type EnhanceResumeRequestBody = z.infer<typeof enhanceResumeRequestSchema>;
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
@@ -24,23 +30,10 @@ export async function POST(request: NextRequest) {
     logger.info(`[${requestId}] POST /api/enhance-resume - Starting resume enhancement`);
 
     // Validate request body
-    const body = await validateRequestBody<{
-      resume: Resume;
-      jobDescription: string;
-      options?: {
-        focusAreas?: Array<'keywords' | 'bulletPoints' | 'skills' | 'summary'>;
-        tone?: 'professional' | 'technical' | 'leadership';
-        maxSuggestions?: number;
-      };
-      aiProvider?: 'gemini';
-      aiModel?: 'gemini-3-flash-preview' | 'gemini-2.5-pro';
-      aiOptions?: {
-        temperature?: number;
-        maxTokens?: number;
-        timeout?: number;
-        maxRetries?: number;
-      };
-    }>(request, enhanceResumeRequestSchema);
+    const body = await validateRequestBody<EnhanceResumeRequestBody>(
+      request,
+      enhanceResumeRequestSchema
+    );
 
     const { resume, jobDescription, options, aiProvider, aiModel, aiOptions } = body;
 
@@ -96,8 +89,9 @@ export async function POST(request: NextRequest) {
     const enhancementService = new AIResumeEnhancementService(tempProviderName);
 
     // Enhance resume
+    // Cast to Resume type - schema validation ensures compatibility
     const enhancementResult = await enhancementService.enhanceResume(
-      resume,
+      resume as Resume,
       jobDescription,
       options
     );
@@ -206,7 +200,7 @@ export async function POST(request: NextRequest) {
     }
 
     // If it's already a NextResponse (from validation), re-throw it
-    if (error instanceof Response) {
+    if (error instanceof NextResponse) {
       throw error;
     }
 
