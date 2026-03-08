@@ -3,15 +3,16 @@
     /* Language and Environment */
     "target": "ES2022",
     "lib": [
-      "ES2022"
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
     ],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     /* Emit */
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "declaration": true,
-    "declarationMap": true,
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
     "sourceMap": true,
     "removeComments": false,
     /* Interop Constraints */
@@ -35,11 +36,17 @@
     /* Completeness */
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
+      "@/components/*": [
+        "./components/*"
+      ],
+      "@/lib/*": [
+        "./lib/*"
       ],
       "@templates/*": [
         "./src/templates/*"
@@ -53,20 +60,30 @@
       "@utils/*": [
         "./src/utils/*"
       ],
-      "@cli/*": [
-        "./src/cli/*"
-      ],
       "@api/*": [
         "./src/api/*"
+      ],
+      "@/*": [
+        "./src/*"
       ]
-    }
+    },
+    "allowJs": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-    "src/**/*"
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
     "dist",
+    ".next",
     "tests"
   ]
 }

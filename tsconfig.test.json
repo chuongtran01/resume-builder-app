@@ -20,9 +20,6 @@
       "@utils/*": [
         "./src/utils/*"
       ],
-      "@cli/*": [
-        "./src/cli/*"
-      ],
       "@api/*": [
         "./src/api/*"
       ]

@@ -16,7 +16,6 @@ module.exports = {
             '@services/*': ['./src/services/*'],
             '@resume-types/*': ['./src/types/*'],
             '@utils/*': ['./src/utils/*'],
-            '@cli/*': ['./src/cli/*'],
             '@api/*': ['./src/api/*'],
           },
         },
@@ -38,11 +37,12 @@ module.exports = {
     '^@services/(.*)$': '<rootDir>/src/services/$1',
     '^@resume-types/(.*)$': '<rootDir>/src/types/$1',
     '^@utils/(.*)$': '<rootDir>/src/utils/$1',
-    '^@cli/(.*)$': '<rootDir>/src/cli/$1',
     '^@api/(.*)$': '<rootDir>/src/api/$1',
   },
-  // Transform ES modules from @google/genai
+  // Transform ES modules from @google/genai and Next.js
   transformIgnorePatterns: [
-    'node_modules/(?!(@google/genai)/)',
+    'node_modules/(?!(@google/genai|next)/)',
   ],
+  // Setup for Next.js
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 };

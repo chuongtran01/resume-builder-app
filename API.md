@@ -10,37 +10,38 @@ The Resume Builder API provides REST endpoints for generating ATS-compliant resu
 
 ### Prerequisites
 
-1. **Build the project:**
+1. **Install dependencies:**
    ```bash
-   npm run build
+   npm install
    ```
 
 2. **Set up environment variables (optional):**
-   - Create a `.env` file if you plan to use AI enhancement features
+   - Create a `.env.local` file if you plan to use AI enhancement features
    - See [AI_CONFIG.md](./AI_CONFIG.md) for configuration details
 
 ### Starting the Server
 
-Start the API server:
+Start the Next.js development server:
 ```bash
-npm run api
+npm run dev
+```
+
+Or build and start production server:
+```bash
+npm run build
+npm start
 ```
 
 The server will start on `http://localhost:3000` by default. You can verify it's running by checking the health endpoint:
 ```bash
-curl http://localhost:3000/health
+curl http://localhost:3000/api/health
 ```
 
 ### Environment Variables
 
 - `PORT` - Server port (default: `3000`)
-- `CORS_ORIGIN` - CORS allowed origin (default: `*`)
 - `NODE_ENV` - Environment mode (default: `development`)
-
-Example with custom port:
-```bash
-PORT=8080 npm run api
-```
+- `GEMINI_API_KEY` - Google Gemini API key (required for AI enhancement)
 
 ## Authentication
 
@@ -52,48 +53,21 @@ Currently, the API does not require authentication. In production, you may want 
 
 Check if the API server is running.
 
-**Endpoint:** `GET /health`
+**Endpoint:** `GET /api/health`
 
 **Response:**
 ```json
 {
   "status": "ok",
   "timestamp": "2024-01-15T10:30:00.000Z",
-  "service": "resume-builder",
+  "service": "resume-builder-app",
   "version": "1.0.0"
 }
 ```
 
 **Example:**
 ```bash
-curl http://localhost:3000/health
-```
-
----
-
-### Root Endpoint
-
-Get API information and available endpoints.
-
-**Endpoint:** `GET /`
-
-**Response:**
-```json
-{
-  "message": "Resume Builder API",
-  "version": "1.0.0",
-  "endpoints": {
-    "health": "/health",
-    "generate": "/api/generateResume",
-    "validate": "/api/validate",
-    "enhance": "/api/enhanceResume"
-  }
-}
-```
-
-**Example:**
-```bash
-curl http://localhost:3000/
+curl http://localhost:3000/api/health
 ```
 
 ---
@@ -102,7 +76,7 @@ curl http://localhost:3000/
 
 Generate a PDF or HTML resume from structured JSON input.
 
-**Endpoint:** `POST /api/generateResume`
+**Endpoint:** `POST /api/generate-resume`
 
 **Content-Type:** `application/json`
 
@@ -228,7 +202,7 @@ Generate a PDF or HTML resume from structured JSON input.
 
 Generate PDF resume:
 ```bash
-curl -X POST http://localhost:3000/api/generateResume \
+curl -X POST http://localhost:3000/api/generate-resume \
   -H "Content-Type: application/json" \
   -d @resume.json \
   --output resume.pdf
@@ -236,7 +210,7 @@ curl -X POST http://localhost:3000/api/generateResume \
 
 Generate HTML resume with modern template:
 ```bash
-curl -X POST http://localhost:3000/api/generateResume \
+curl -X POST http://localhost:3000/api/generate-resume \
   -H "Content-Type: application/json" \
   -d '{
     "resume": { ... },
@@ -250,7 +224,7 @@ curl -X POST http://localhost:3000/api/generateResume \
 
 Generate PDF with ATS validation:
 ```bash
-curl -X POST http://localhost:3000/api/generateResume \
+curl -X POST http://localhost:3000/api/generate-resume \
   -H "Content-Type: application/json" \
   -d '{
     "resume": { ... },
@@ -265,7 +239,7 @@ curl -X POST http://localhost:3000/api/generateResume \
 
 Using JavaScript (fetch):
 ```javascript
-const response = await fetch('http://localhost:3000/api/generateResume', {
+const response = await fetch('http://localhost:3000/api/generate-resume', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -445,7 +419,7 @@ console.log('Compliant:', result.isCompliant);
 
 Enhance a resume based on a job description. This endpoint analyzes the job description, enhances the resume with relevant keywords, reorders skills, and provides detailed change tracking.
 
-**Endpoint:** `POST /api/enhanceResume`
+**Endpoint:** `POST /api/enhance-resume`
 
 **Content-Type:** `application/json`
 
@@ -675,7 +649,7 @@ Enhance a resume based on a job description. This endpoint analyzes the job desc
 
 Enhance resume (with defaults):
 ```bash
-curl -X POST http://localhost:3000/api/enhanceResume \
+curl -X POST http://localhost:3000/api/enhance-resume \
   -H "Content-Type: application/json" \
   -d '{
     "resume": { ... },
@@ -686,7 +660,7 @@ curl -X POST http://localhost:3000/api/enhanceResume \
 
 Enhance resume with custom AI model:
 ```bash
-curl -X POST http://localhost:3000/api/enhanceResume \
+curl -X POST http://localhost:3000/api/enhance-resume \
   -H "Content-Type: application/json" \
   -d '{
     "resume": { ... },
@@ -702,7 +676,7 @@ curl -X POST http://localhost:3000/api/enhanceResume \
 
 Using JavaScript (fetch):
 ```javascript
-const response = await fetch('http://localhost:3000/api/enhanceResume', {
+const response = await fetch('http://localhost:3000/api/enhance-resume', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
