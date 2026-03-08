@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
 import { fadeInUp, animationViewport } from './animations';
 
 interface PricingFeature {
@@ -67,15 +68,10 @@ export function PricingSection({ plans = defaultPlans }: PricingSectionProps) {
         <div className="mb-8 text-center">
           <div className="inline-flex items-center gap-4 mb-6">
             <span className="text-sm font-sans text-foreground/70">Monthly</span>
-            <button
-              onClick={() => setIsAnnual(!isAnnual)}
-              className="relative w-12 h-6 bg-foreground/10 rounded-full"
-            >
-              <span
-                className={`absolute top-1 w-4 h-4 bg-accent rounded-full transition-transform ${isAnnual ? 'left-7' : 'left-1'
-                  }`}
-              ></span>
-            </button>
+            <Switch
+              checked={isAnnual}
+              onCheckedChange={setIsAnnual}
+            />
             <span className="text-sm font-sans text-foreground">
               Annual <span className="text-accent">(20% off)</span>
             </span>
@@ -93,8 +89,8 @@ export function PricingSection({ plans = defaultPlans }: PricingSectionProps) {
                 viewport={animationViewport}
                 variants={fadeInUp}
                 className={`border p-8 ${plan.highlighted
-                    ? 'border-l-4 border-l-accent border-t border-r border-b border-border'
-                    : 'border-border'
+                  ? 'border-l-4 border-l-accent border-t border-r border-b border-border'
+                  : 'border-border'
                   }`}
               >
                 <h3 className="text-xl font-serif font-medium text-foreground mb-2">
