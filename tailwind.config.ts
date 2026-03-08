@@ -1,7 +1,6 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -18,58 +17,30 @@ const config: Config = {
     },
     extend: {
       colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
+        // Anthropic-style color palette
+        background: '#FAF9F6', // warm off-white
+        'background-secondary': '#EDE9E0', // darker cream for testimonials
+        foreground: '#1A1714', // dark brown-charcoal
+        accent: '#C4622D', // muted terracotta
+        border: '#D6D0C8', // 1px dividers
       },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+      fontFamily: {
+        serif: ['Lora', 'serif'],
+        sans: ['DM Sans', 'sans-serif'],
       },
-      keyframes: {
-        'accordion-down': {
-          from: { height: '0' },
-          to: { height: 'var(--radix-accordion-content-height)' },
-        },
-        'accordion-up': {
-          from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
-        },
+      fontSize: {
+        'hero': ['clamp(3rem, 8vw, 6rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'hero-mobile': ['clamp(2.5rem, 10vw, 4.5rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'display': ['clamp(2.5rem, 6vw, 4rem)', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+        'quote': ['clamp(1.75rem, 4vw, 2.5rem)', { lineHeight: '1.4' }],
       },
-      animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
+      spacing: {
+        'section': '8rem',
+        'section-mobile': '4rem',
+      },
+      maxWidth: {
+        'editorial': '1200px',
+        'narrow': '680px',
       },
     },
   },

@@ -3,8 +3,8 @@ import { Navigation } from '@/components/navigation';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Resume Builder App',
-  description: 'A modular, ATS-friendly resume generator',
+  title: 'Craft - Your resume, written with intention',
+  description: 'Craft uses AI to translate your experience into clear, compelling language — tailored to every role you apply for.',
 };
 
 export default function RootLayout({
