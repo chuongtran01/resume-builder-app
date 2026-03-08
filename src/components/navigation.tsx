@@ -9,23 +9,23 @@ export function Navigation() {
           <Link href="/" className="text-xl font-serif font-medium text-foreground hover:opacity-80 transition-opacity">
             Craft
           </Link>
-          
+
           {/* Center Links */}
           <div className="hidden lg:flex items-center gap-8">
-            <Link href="#product" className="text-sm font-sans text-foreground/80 hover:text-foreground transition-colors">
+            <Link href="#product" className="text-sm font-sans text-foreground/80 hover:text-foreground hover:underline transition-colors">
               Product
             </Link>
-            <Link href="#how-it-works" className="text-sm font-sans text-foreground/80 hover:text-foreground transition-colors">
+            <Link href="#how-it-works" className="text-sm font-sans text-foreground/80 hover:text-foreground hover:underline transition-colors">
               How It Works
             </Link>
-            <Link href="#pricing" className="text-sm font-sans text-foreground/80 hover:text-foreground transition-colors">
+            <Link href="#pricing" className="text-sm font-sans text-foreground/80 hover:text-foreground hover:underline transition-colors">
               Pricing
             </Link>
-            <Link href="#blog" className="text-sm font-sans text-foreground/80 hover:text-foreground transition-colors">
+            <Link href="#blog" className="text-sm font-sans text-foreground/80 hover:text-foreground hover:underline transition-colors">
               Blog
             </Link>
           </div>
-          
+
           {/* CTA Button */}
           <Link
             href="#get-started"
