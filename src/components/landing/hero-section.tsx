@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ResumeMockup } from '@/components/resume-mockup';
-import { fadeInUp } from './animations';
+import { fadeInUp } from '@/components/landing/animations';
 
 export function HeroSection() {
   return (

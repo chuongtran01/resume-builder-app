@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { fadeInUp, animationViewport } from './animations';
+import { fadeInUp, animationViewport } from '@/components/landing/animations';
 
 interface Step {
   number: string;

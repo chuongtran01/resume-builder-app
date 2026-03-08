@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-import { fadeInUp, animationViewport } from './animations';
+import { fadeInUp, animationViewport } from '@/components/landing/animations';
+import { Label } from '@/components/ui/label';
 
 interface PricingFeature {
   text: string;
@@ -72,9 +73,9 @@ export function PricingSection({ plans = defaultPlans }: PricingSectionProps) {
               checked={isAnnual}
               onCheckedChange={setIsAnnual}
             />
-            <span className="text-sm font-sans text-foreground">
+            <Label htmlFor="annual">
               Annual <span className="text-accent">(20% off)</span>
-            </span>
+            </Label>
           </div>
         </div>
 

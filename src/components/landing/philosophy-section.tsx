@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { fadeInUp, staggerContainer, animationViewport } from './animations';
+import { fadeInUp, staggerContainer, animationViewport } from '@/components/landing/animations';
 
 interface PhilosophySectionProps {
   quote?: string;

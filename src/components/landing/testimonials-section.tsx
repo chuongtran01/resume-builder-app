@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { fadeInUp, animationViewport } from './animations';
+import { fadeInUp, animationViewport } from '@/components/landing/animations';
 
 interface Testimonial {
   quote: string;
@@ -44,10 +44,10 @@ export function TestimonialsSection({ testimonials = defaultTestimonials }: Test
               viewport={animationViewport}
               variants={fadeInUp}
               className={`text-center lg:text-left ${index === 0
-                  ? 'pb-8 md:pb-0 border-b md:border-b-0 md:border-r border-border'
-                  : index === 1
-                    ? 'pb-8 md:pb-0 md:border-r border-border md:px-8 lg:px-12'
-                    : ''
+                ? 'pb-8 md:pb-0 border-b md:border-b-0 md:border-r border-border'
+                : index === 1
+                  ? 'pb-8 md:pb-0 md:border-r border-border md:px-8 lg:px-12'
+                  : ''
                 }`}
             >
               <p className="text-5xl font-serif text-foreground/20 mb-4">"</p>
