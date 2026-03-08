@@ -9,7 +9,7 @@ import * as os from 'os';
 import { logger } from '@utils/logger';
 import { generateResumeFromObject, TemplateNotFoundError } from '@services/resumeGenerator';
 import { PdfGenerationError } from '@utils/pdfGenerator';
-import { validateRequestBody, createErrorResponse, createFileResponse } from '@/src/lib/api-helpers';
+import { validateRequestBody, createErrorResponse, createFileResponse } from '@/app/api/helpers';
 import { generateResumeRequestSchema } from '@/app/api/schemas';
 import type { Resume } from '@resume-types/resume.types';
 

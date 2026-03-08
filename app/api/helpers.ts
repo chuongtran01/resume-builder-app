@@ -91,7 +91,7 @@ export function createFileResponse(
   filename: string,
   headers?: Record<string, string>
 ): NextResponse {
-  const response = new NextResponse(fileBuffer, {
+  const response = new NextResponse(fileBuffer as unknown as BodyInit, {
     status: 200,
     headers: {
       'Content-Type': contentType,
