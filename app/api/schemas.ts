@@ -1,22 +1,8 @@
 /**
- * API middleware for request validation and error handling
+ * Zod validation schemas for API request validation
  */
 
-import { Request, Response, NextFunction } from 'express';
-import { z, ZodError } from 'zod';
-import { logger } from '@utils/logger';
-
-/**
- * Validation error response
- */
-export interface ValidationErrorResponse {
-  error: 'Validation Error';
-  message: string;
-  details: Array<{
-    path: string;
-    message: string;
-  }>;
-}
+import { z } from 'zod';
 
 /**
  * Zod schema for PersonalInfo
@@ -186,61 +172,3 @@ export const enhanceResumeRequestSchema = z.object({
   aiModel: z.enum(['gemini-3-flash-preview', 'gemini-2.5-pro']).optional(),
   aiOptions: aiOptionsSchema.optional(),
 });
-
-/**
- * Format Zod error for API response
- */
-function formatZodError(error: ZodError): ValidationErrorResponse {
-  return {
-    error: 'Validation Error',
-    message: 'Request validation failed',
-    details: error.issues.map((err) => ({
-      path: err.path.join('.'),
-      message: err.message,
-    })),
-  };
-}
-
-/**
- * Validation middleware factory
- * Creates middleware that validates request body against a Zod schema
- */
-export function validateRequest<T>(schema: z.ZodSchema<T>) {
-  return (req: Request, res: Response, next: NextFunction): void => {
-    try {
-      // Validate and parse request body
-      const validatedData = schema.parse(req.body);
-
-      // Replace req.body with validated data (ensures type safety)
-      req.body = validatedData;
-
-      next();
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const errorResponse = formatZodError(error);
-
-        logger.warn(`Validation error: ${errorResponse.message}`);
-        if (logger.isVerbose()) {
-          logger.debug(`Validation details: ${JSON.stringify(errorResponse.details, null, 2)}`);
-        }
-
-        res.status(400).json(errorResponse);
-      } else {
-        // Unexpected error
-        logger.error(`Unexpected validation error: ${error instanceof Error ? error.message : String(error)}`);
-        res.status(500).json({
-          error: 'Internal Server Error',
-          message: 'An unexpected error occurred during validation',
-        });
-      }
-    }
-  };
-}
-
-/**
- * Type-safe request body extractor
- * Use this to get the validated request body with proper typing
- */
-export function getValidatedBody<T>(req: Request): T {
-  return req.body as T;
-}

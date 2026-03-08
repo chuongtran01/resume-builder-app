@@ -5,7 +5,7 @@
 import { NextRequest } from 'next/server';
 import { logger } from '@utils/logger';
 import { validateRequestBody, createErrorResponse } from '@/src/lib/api-helpers';
-import { validateResumeRequestSchema } from '@api/middleware';
+import { validateResumeRequestSchema } from '@/app/api/schemas';
 import { validateAtsCompliance } from '@services/atsValidator';
 import type { Resume } from '@resume-types/resume.types';
 

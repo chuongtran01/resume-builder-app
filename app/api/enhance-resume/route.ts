@@ -8,7 +8,7 @@ import * as path from 'path';
 import * as os from 'os';
 import { logger } from '@utils/logger';
 import { validateRequestBody, createErrorResponse } from '@/src/lib/api-helpers';
-import { enhanceResumeRequestSchema } from '@api/middleware';
+import { enhanceResumeRequestSchema } from '@/app/api/schemas';
 import { generateResumeFromObject } from '@services/resumeGenerator';
 import type { Resume } from '@resume-types/resume.types';
 

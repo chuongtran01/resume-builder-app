@@ -10,7 +10,7 @@ import { logger } from '@utils/logger';
 import { generateResumeFromObject, TemplateNotFoundError } from '@services/resumeGenerator';
 import { PdfGenerationError } from '@utils/pdfGenerator';
 import { validateRequestBody, createErrorResponse, createFileResponse } from '@/src/lib/api-helpers';
-import { generateResumeRequestSchema } from '@api/middleware';
+import { generateResumeRequestSchema } from '@/app/api/schemas';
 import type { Resume } from '@resume-types/resume.types';
 
 /**
