@@ -1,11 +1,18 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Download, FileText, ChevronDown } from 'lucide-react';
 import type { PersonalInfo, SkillCategory } from '@resume-types/resume.types';
 import type { ExperienceEntry, EducationEntry, ProjectEntry, CertificationEntry } from '@/types/builder.types';
 import { formatDate } from '@/templates/templateHelpers';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export interface ResumePreviewPanelProps {
   personalInfo: PersonalInfo | undefined;
@@ -16,7 +23,7 @@ export interface ResumePreviewPanelProps {
   projects?: ProjectEntry[];
   certifications?: CertificationEntry[];
   onExportPdf: () => void;
-  onExportDocx: () => void;
+  onExportDocx?: () => void;
 }
 
 function buildContactParts(pi: PersonalInfo | undefined): string[] {
@@ -59,6 +66,29 @@ export function ResumePreviewPanel({
 
   return (
     <div className="flex flex-col h-full bg-[#F0EDE6]">
+      <div className="shrink-0 border-b border-border bg-background shadow-sm py-3.5 flex items-center justify-end flex-wrap gap-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              Download
+              <ChevronDown className="h-4 w-4 ml-1.5 opacity-60" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={onExportPdf}>
+              <FileText className="h-4 w-4 mr-2" />
+              PDF
+            </DropdownMenuItem>
+            {onExportDocx && (
+              <DropdownMenuItem onClick={onExportDocx}>
+                <FileText className="h-4 w-4 mr-2" />
+                DOCX
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <ScrollArea className="flex-1 py-8" >
         <div className="max-w-[680px] mx-auto py-8 px-6 lg:px-14 bg-white shadow-[0_4px_32px_rgba(0,0,0,0.08)] text-[11px] leading-[1.35] text-[#000]" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
           {hasContent && (
@@ -230,16 +260,6 @@ export function ResumePreviewPanel({
           )}
         </div>
       </ScrollArea>
-      <div className="sticky bottom-0 border-t border-[#D6D0C8] bg-[#FAF9F6] px-4 py-3 flex items-center justify-end flex-wrap gap-2">
-        <div className="flex gap-2">
-          <Button variant="default" size="sm" onClick={onExportPdf}>
-            Download PDF
-          </Button>
-          <Button variant="outline" size="sm" onClick={onExportDocx}>
-            Download DOCX
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }
