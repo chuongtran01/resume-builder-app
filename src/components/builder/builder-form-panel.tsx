@@ -206,7 +206,10 @@ export function BuilderFormPanel({
             <CollapsibleTrigger asChild>
               <div className="w-full flex items-center justify-between py-3 text-left cursor-pointer">
                 <span className="font-serif text-foreground">Summary</span>
-                <motion.span animate={{ rotate: sectionOpen.summary ? 180 : 0 }}><ChevronDown className="h-4 w-4" /></motion.span>
+                <div className="flex items-center gap-1">
+                  <Badge variant="outline">Optional</Badge>
+                  <motion.span animate={{ rotate: sectionOpen.summary ? 180 : 0 }}><ChevronDown className="h-4 w-4" /></motion.span>
+                </div>
               </div>
             </CollapsibleTrigger>
             <Separator className="mb-3" />
