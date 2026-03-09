@@ -39,7 +39,16 @@ export function FormSectionCollapsible({
           <span className="font-semibold text-base tracking-tight text-foreground">{title}</span>
           <div className="flex items-center gap-1 shrink-0">
             {optionalBadge && <Badge variant="outline" className="text-xs">Optional</Badge>}
-            {triggerSlot && <div onClick={(e) => e.stopPropagation()}>{triggerSlot}</div>}
+            {triggerSlot && (
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!open) onOpenChange();
+                }}
+              >
+                {triggerSlot}
+              </div>
+            )}
             <motion.span animate={{ rotate: open ? 180 : 0 }} className="text-muted-foreground">
               <ChevronDown className="h-5 w-5" />
             </motion.span>
