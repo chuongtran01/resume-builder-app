@@ -37,9 +37,9 @@ export function FormSectionCollapsible({
       <CollapsibleTrigger asChild>
         <div className="w-full flex items-center justify-between py-3 text-left cursor-pointer">
           <span className="font-serif text-foreground">{title}</span>
-          <div className="flex items-center gap-1" onClick={triggerSlot ? (e) => e.stopPropagation() : undefined}>
+          <div className="flex items-center gap-1">
             {optionalBadge && <Badge variant="outline">Optional</Badge>}
-            {triggerSlot}
+            {triggerSlot && <div onClick={(e) => e.stopPropagation()}>{triggerSlot}</div>}
             <motion.span animate={{ rotate: open ? 180 : 0 }}>
               <ChevronDown className="h-4 w-4" />
             </motion.span>
