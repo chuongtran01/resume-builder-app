@@ -55,23 +55,22 @@ export function ResumePreviewPanel({
     projects.length > 0 ||
     certifications.length > 0;
 
-  const sectionTitleClass = 'text-[11px] uppercase tracking-widest font-sans font-bold text-[#1A1714] border-b border-[#1A1714] pb-0.5 mb-2';
+  const sectionTitleClass = 'text-[11px] uppercase tracking-widest font-bold text-[#000] border-b border-[#000] pb-0.5 mb-1';
 
   return (
     <div className="flex flex-col h-full bg-[#F0EDE6]">
-      <p className="text-[11px] uppercase tracking-widest font-sans text-foreground/50 mb-4">PREVIEW</p>
-      <ScrollArea className="flex-1">
-        <div className="max-w-[680px] mx-auto py-8 px-6 lg:px-14 bg-white shadow-[0_4px_32px_rgba(0,0,0,0.08)]" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
+      <ScrollArea className="flex-1 py-8" >
+        <div className="max-w-[680px] mx-auto py-8 px-6 lg:px-14 bg-white shadow-[0_4px_32px_rgba(0,0,0,0.08)] text-[11px] leading-[1.35] text-[#000]" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
           {hasContent && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-              {/* Header: centered, matches classic */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-2">
+              {/* Header: centered, matches classic (header mb 8pt, h1 mb 2pt, contact 8pt) */}
               {(pi?.name || contactLine) && (
-                <div className="text-center mb-6">
+                <div className="text-center mb-2 pb-0.5">
                   {pi?.name && (
-                    <h1 className="text-[20px] font-serif font-bold text-[#1A1714] mb-0.5">{pi.name}</h1>
+                    <h1 className="text-[20px] font-bold text-[#000] mb-0.5">{pi.name}</h1>
                   )}
                   {contactLine && (
-                    <p className="text-[11px] font-sans text-[#1A1714]">
+                    <p className="text-[10px] text-[#000]">
                       {contactParts.map((part, i) => (
                         <span key={i}>
                           {i > 0 && <span className="mx-1">|</span>}
@@ -86,7 +85,7 @@ export function ResumePreviewPanel({
               {/* Summary: no section title in classic */}
               {summary && (
                 <div className="space-y-1">
-                  <p className="text-[11px] font-sans leading-relaxed text-[#1A1714] text-justify">{summary}</p>
+                  <p className="text-justify">{summary}</p>
                 </div>
               )}
 
@@ -94,24 +93,24 @@ export function ResumePreviewPanel({
               {experience.length > 0 && (
                 <div>
                   <h2 className={sectionTitleClass}>Experience</h2>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {experience.map((exp, i) => (
-                      <div key={i} className="space-y-0.5">
+                      <div key={i} className="space-y-0">
                         <div className="flex justify-between items-baseline">
-                          <span className="font-serif font-bold text-[11px] text-[#1A1714]">{exp.company}</span>
-                          <span className="font-serif font-bold text-[11px] text-[#1A1714]">
+                          <span className="font-bold">{exp.company}</span>
+                          <span className="font-bold">
                             {formatDate(exp.startDate)}
                             {exp.endDate ? ` - ${formatDate(exp.endDate)}` : ''}
                           </span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="font-serif italic text-[11px] text-[#1A1714]">{exp.role || '(Role)'}</span>
+                          <span className="italic">{exp.role || '(Role)'}</span>
                           {exp.location && (
-                            <span className="font-serif italic text-[11px] text-[#1A1714]">{exp.location}</span>
+                            <span className="italic">{exp.location}</span>
                           )}
                         </div>
                         {(exp.bulletPoints?.length && exp.bulletPoints[0]) ? (
-                          <ul className="mt-1 ml-4 list-disc text-[11px] font-sans leading-relaxed text-[#1A1714] space-y-0.5">
+                          <ul className="mt-0.5 ml-4 list-disc space-y-0">
                             {exp.bulletPoints.filter(Boolean).map((b, j) => (
                               <li key={j}>{b}</li>
                             ))}
@@ -127,25 +126,25 @@ export function ResumePreviewPanel({
               {education.length > 0 && (
                 <div>
                   <h2 className={sectionTitleClass}>Education</h2>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {education.map((edu, i) => (
-                      <div key={i} className="space-y-0.5">
+                      <div key={i} className="space-y-0">
                         <div className="flex justify-between items-baseline">
-                          <span className="font-serif font-bold text-[11px] text-[#1A1714]">{edu.institution}</span>
-                          <span className="font-serif font-bold text-[11px] text-[#1A1714]">
+                          <span className="font-bold">{edu.institution}</span>
+                          <span className="font-bold">
                             {formatDate(edu.graduationDate)}
                           </span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="font-serif italic text-[11px] text-[#1A1714]">
+                          <span className="italic">
                             {edu.degree}{edu.field ? ` in ${edu.field}` : ''}
                           </span>
                           {edu.gpa && (
-                            <span className="text-[11px] font-sans text-[#1A1714]">GPA: {edu.gpa}</span>
+                            <span>GPA: {edu.gpa}</span>
                           )}
                         </div>
                         {edu.honors && edu.honors.length > 0 && (
-                          <p className="text-[11px] font-sans text-[#1A1714]">
+                          <p>
                             Honors: {edu.honors.join(', ')}
                           </p>
                         )}
@@ -159,11 +158,11 @@ export function ResumePreviewPanel({
               {hasSkills && (
                 <div>
                   <h2 className={sectionTitleClass}>Skills</h2>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {skillCategories
                       .filter((c) => c.items.length > 0)
                       .map((cat, i) => (
-                        <div key={i} className="text-[11px] font-sans text-[#1A1714]">
+                        <div key={i}>
                           <span className="font-bold">{cat.name}: </span>
                           <span>{cat.items.join(', ')}</span>
                         </div>
@@ -176,11 +175,11 @@ export function ResumePreviewPanel({
               {certifications.length > 0 && (
                 <div>
                   <h2 className={sectionTitleClass}>Certifications</h2>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {certifications.map((cert, i) => (
                       <div key={i}>
-                        <p className="font-serif font-bold text-[11px] text-[#1A1714]">{cert.name}</p>
-                        <p className="text-[11px] font-sans text-[#1A1714]">
+                        <p className="font-bold">{cert.name}</p>
+                        <p>
                           {cert.issuer} | {formatDate(cert.date)}
                           {cert.credentialId ? ` | Credential ID: ${cert.credentialId}` : ''}
                         </p>
@@ -194,10 +193,10 @@ export function ResumePreviewPanel({
               {projects.length > 0 && (
                 <div>
                   <h2 className={sectionTitleClass}>Projects</h2>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {projects.map((proj, i) => (
                       <div key={i}>
-                        <p className="font-serif font-bold text-[11px] text-[#1A1714]">
+                        <p className="font-bold">
                           {proj.name}
                           {proj.url && (
                             <>
@@ -216,7 +215,7 @@ export function ResumePreviewPanel({
                             </>
                           )}
                         </p>
-                        <ul className="ml-4 list-disc text-[11px] font-sans leading-relaxed text-[#1A1714] space-y-0.5">
+                        <ul className="ml-4 list-disc space-y-0">
                           <li>{proj.description}</li>
                           {proj.technologies && proj.technologies.length > 0 && (
                             <li>Technologies: {proj.technologies.join(', ')}</li>
