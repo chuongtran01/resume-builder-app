@@ -35,18 +35,18 @@ export function FormSectionCollapsible({
   return (
     <Collapsible open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
       <CollapsibleTrigger asChild>
-        <div className="w-full flex items-center justify-between py-3 text-left cursor-pointer">
-          <span className="font-serif text-foreground">{title}</span>
-          <div className="flex items-center gap-1">
-            {optionalBadge && <Badge variant="outline">Optional</Badge>}
+        <div className="w-full flex items-center justify-between gap-2 py-4 px-3 -mx-3 text-left cursor-pointer rounded-md bg-muted/40 hover:bg-muted/60 border border-transparent hover:border-border/60 transition-colors">
+          <span className="font-semibold text-base tracking-tight text-foreground">{title}</span>
+          <div className="flex items-center gap-1 shrink-0">
+            {optionalBadge && <Badge variant="outline" className="text-xs">Optional</Badge>}
             {triggerSlot && <div onClick={(e) => e.stopPropagation()}>{triggerSlot}</div>}
-            <motion.span animate={{ rotate: open ? 180 : 0 }}>
-              <ChevronDown className="h-4 w-4" />
+            <motion.span animate={{ rotate: open ? 180 : 0 }} className="text-muted-foreground">
+              <ChevronDown className="h-5 w-5" />
             </motion.span>
           </div>
         </div>
       </CollapsibleTrigger>
-      <Separator className="mb-3" />
+      <Separator className="mb-3 mt-0.5" />
       <CollapsibleContent>
         <motion.div
           initial={{ height: 0, opacity: 0 }}
