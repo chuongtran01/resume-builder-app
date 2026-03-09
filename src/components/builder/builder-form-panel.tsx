@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Upload } from 'lucide-react';
-import type { PersonalInfo } from '@resume-types/resume.types';
+import type { PersonalInfo, SkillCategory } from '@resume-types/resume.types';
 import type { ExperienceEntry, EducationEntry, ProjectEntry, CertificationEntry, SectionId } from '@/types/builder.types';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -19,7 +19,7 @@ import {
 export interface BuilderFormPanelProps {
   personalInfo: PersonalInfo | undefined;
   summary: string;
-  skills: string[];
+  skillCategories: SkillCategory[];
   experience: ExperienceEntry[];
   education: EducationEntry[];
   projects: ProjectEntry[];
@@ -48,14 +48,17 @@ export interface BuilderFormPanelProps {
   setCertAt: (index: number, updater: (c: CertificationEntry) => CertificationEntry) => void;
   addCertification: () => void;
   removeCertification: (index: number) => void;
-  addSkill: (skill: string) => void;
-  removeSkill: (index: number) => void;
+  addCategory: () => void;
+  removeCategory: (index: number) => void;
+  setCategoryAt: (index: number, updater: (c: SkillCategory) => SkillCategory) => void;
+  addSkillInCategory: (categoryIndex: number, skill: string) => void;
+  removeSkillInCategory: (categoryIndex: number, itemIndex: number) => void;
 }
 
 export function BuilderFormPanel({
   personalInfo: pi,
   summary,
-  skills,
+  skillCategories,
   experience,
   education,
   projects,
@@ -84,8 +87,11 @@ export function BuilderFormPanel({
   setCertAt,
   addCertification,
   removeCertification,
-  addSkill,
-  removeSkill,
+  addCategory,
+  removeCategory,
+  setCategoryAt,
+  addSkillInCategory,
+  removeSkillInCategory,
 }: BuilderFormPanelProps) {
   return (
     <div className="flex flex-col h-full">
@@ -156,11 +162,14 @@ export function BuilderFormPanel({
             removeEducation={removeEducation}
           />
           <SkillsSection
-            skills={skills}
+            skillCategories={skillCategories}
             open={!!sectionOpen.skills}
             onToggle={() => toggleSection('skills')}
-            addSkill={addSkill}
-            removeSkill={removeSkill}
+            addCategory={addCategory}
+            removeCategory={removeCategory}
+            setCategoryAt={setCategoryAt}
+            addSkillInCategory={addSkillInCategory}
+            removeSkillInCategory={removeSkillInCategory}
           />
           <ProjectsSection
             projects={projects}

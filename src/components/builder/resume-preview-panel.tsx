@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import type { PersonalInfo } from '@resume-types/resume.types';
+import type { PersonalInfo, SkillCategory } from '@resume-types/resume.types';
 import type { ExperienceEntry, EducationEntry, ProjectEntry, CertificationEntry } from '@/types/builder.types';
 import { formatDate } from '@/templates/templateHelpers';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -12,7 +12,7 @@ export interface ResumePreviewPanelProps {
   summary: string;
   experience: ExperienceEntry[];
   education: EducationEntry[];
-  skills: string[];
+  skillCategories: SkillCategory[];
   projects?: ProjectEntry[];
   certifications?: CertificationEntry[];
   onExportPdf: () => void;
@@ -36,7 +36,7 @@ export function ResumePreviewPanel({
   summary,
   experience,
   education,
-  skills,
+  skillCategories,
   projects = [],
   certifications = [],
   onExportPdf,
@@ -44,13 +44,14 @@ export function ResumePreviewPanel({
 }: ResumePreviewPanelProps) {
   const contactParts = buildContactParts(pi);
   const contactLine = contactParts.join(' | ');
+  const hasSkills = skillCategories.some((c) => c.items.length > 0);
   const hasContent =
     pi?.name ||
     contactLine ||
     summary ||
     experience.length > 0 ||
     education.length > 0 ||
-    skills.length > 0 ||
+    hasSkills ||
     projects.length > 0 ||
     certifications.length > 0;
 
@@ -154,13 +155,19 @@ export function ResumePreviewPanel({
                 </div>
               )}
 
-              {/* Skills: category style like classic "Skills: item1, item2" */}
-              {skills.length > 0 && (
+              {/* Skills: per-category "Category Name: item1, item2" */}
+              {hasSkills && (
                 <div>
                   <h2 className={sectionTitleClass}>Skills</h2>
-                  <div className="text-[11px] font-sans text-[#1A1714]">
-                    <span className="font-bold">Skills: </span>
-                    <span>{skills.join(', ')}</span>
+                  <div className="space-y-2">
+                    {skillCategories
+                      .filter((c) => c.items.length > 0)
+                      .map((cat, i) => (
+                        <div key={i} className="text-[11px] font-sans text-[#1A1714]">
+                          <span className="font-bold">{cat.name}: </span>
+                          <span>{cat.items.join(', ')}</span>
+                        </div>
+                      ))}
                   </div>
                 </div>
               )}

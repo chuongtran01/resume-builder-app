@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload } from 'lucide-react';
-import type { Resume, Experience, Education, Project, Certification } from '@resume-types/resume.types';
+import type { Resume, Experience, Education, Project, Certification, SkillCategory } from '@resume-types/resume.types';
 import type { ExperienceEntry, EducationEntry, ProjectEntry, CertificationEntry, SectionId } from '@/types/builder.types';
 import { DEFAULT_SECTION_OPEN } from '@/types/builder.types';
 import { parseDocument } from '@/utils/documentParser';
@@ -67,12 +67,12 @@ function newCert(): CertificationEntry {
 
 type DraftData = {
   resume: Partial<Resume>;
-  skills: string[];
+  skillCategories: SkillCategory[];
 };
 
 function resumeToExportResume(
   resume: Partial<Resume>,
-  skills: string[]
+  skillCategories: SkillCategory[]
 ): Partial<Resume> {
   const out = { ...resume } as Partial<Resume> & { experience?: (Experience & { id?: string })[]; education?: (Education & { id?: string })[]; projects?: (Project & { id?: string })[]; certifications?: (Certification & { id?: string })[] };
   if (out.experience?.length) {
@@ -99,8 +99,9 @@ function resumeToExportResume(
       return c;
     });
   }
-  if (skills.length > 0) {
-    out.skills = { categories: [{ name: 'Skills', items: skills }] };
+  const nonEmpty = skillCategories.filter((c) => c.items.length > 0);
+  if (nonEmpty.length > 0) {
+    out.skills = { categories: nonEmpty };
   }
   return out;
 }
@@ -109,7 +110,7 @@ export default function BuilderPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [resume, setResume] = useState<Partial<Resume>>({});
-  const [skills, setSkills] = useState<string[]>([]);
+  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([{ name: 'Skills', items: [] }]);
   const [sectionOpen, setSectionOpen] = useState<Record<string, boolean>>(DEFAULT_SECTION_OPEN);
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [importError, setImportError] = useState<string | null>(null);
@@ -147,7 +148,7 @@ export default function BuilderPage() {
     !!resume.summary ||
     (experience.length > 0 && (experience[0]?.company || experience[0]?.role)) ||
     education.length > 0 ||
-    skills.length > 0 ||
+    skillCategories.some((c) => c.items.length > 0) ||
     projects.length > 0 ||
     certifications.length > 0;
 
@@ -172,7 +173,14 @@ export default function BuilderPage() {
           }
           setResume(r);
         }
-        if (Array.isArray(draft.skills)) setSkills(draft.skills);
+        if (Array.isArray(draft.skillCategories) && draft.skillCategories.length > 0) {
+          setSkillCategories(draft.skillCategories);
+        } else {
+          const legacy = draft as unknown as { skills?: string[] };
+          if (Array.isArray(legacy.skills)) {
+            setSkillCategories([{ name: 'Skills', items: legacy.skills }]);
+          }
+        }
       } catch (_) {}
     }
   }, []);
@@ -198,11 +206,11 @@ export default function BuilderPage() {
   useEffect(() => {
     if (!hasData && !resume.personalInfo && !resume.summary && experience.length === 0) return;
     const t = setTimeout(() => {
-      const draft: DraftData = { resume, skills };
+      const draft: DraftData = { resume, skillCategories };
       localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
     }, 1000);
     return () => clearTimeout(t);
-  }, [resume, skills, hasData]);
+  }, [resume, skillCategories, hasData]);
 
   const toggleSection = (id: SectionId) => {
     setSectionOpen((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -293,27 +301,53 @@ export default function BuilderPage() {
     setResumeAndMarkSave((prev) => ({ ...prev, certifications: list }));
   };
 
-  const addSkill = (skill: string) => {
-    const t = skill.trim();
-    if (!t) return;
-    setSkills((prev) => (prev.includes(t) ? prev : [...prev, t]));
+  const addCategory = () => {
+    setSkillCategories((prev) => [...prev, { name: 'New Category', items: [] }]);
     scheduleSavedIndicator();
   };
 
-  const removeSkill = (index: number) => {
-    setSkills((prev) => prev.filter((_, i) => i !== index));
+  const removeCategory = (index: number) => {
+    setSkillCategories((prev) => prev.filter((_, i) => i !== index));
     scheduleSavedIndicator();
+  };
+
+  const setCategoryAt = (index: number, updater: (c: SkillCategory) => SkillCategory) => {
+    const list = [...skillCategories];
+    if (!list[index]) return;
+    list[index] = updater(list[index]);
+    setSkillCategories(list);
+    scheduleSavedIndicator();
+  };
+
+  const addSkillInCategory = (categoryIndex: number, skill: string) => {
+    const t = skill.trim();
+    if (!t) return;
+    setCategoryAt(categoryIndex, (cat) =>
+      cat.items.includes(t) ? cat : { ...cat, items: [...cat.items, t] }
+    );
+  };
+
+  const removeSkillInCategory = (categoryIndex: number, itemIndex: number) => {
+    setCategoryAt(categoryIndex, (cat) => ({
+      ...cat,
+      items: cat.items.filter((_, i) => i !== itemIndex),
+    }));
   };
 
   const clearAll = () => {
     setResume({});
-    setSkills([]);
+    setSkillCategories([{ name: 'Skills', items: [] }]);
     localStorage.removeItem(DRAFT_STORAGE_KEY);
     setShowClearConfirm(false);
   };
 
   const handleImportSuccess = (parsed: Partial<Resume>) => {
     setResume(parsed);
+    const skillsSection = parsed.skills;
+    if (skillsSection && typeof skillsSection === 'object' && 'categories' in skillsSection && Array.isArray((skillsSection as { categories: SkillCategory[] }).categories)) {
+      const cats = (skillsSection as { categories: SkillCategory[] }).categories;
+      if (cats.length > 0) setSkillCategories(cats);
+    }
     setShowImportDialog(false);
     setImportError(null);
     setImportProgress(0);
@@ -322,8 +356,8 @@ export default function BuilderPage() {
   };
 
   const handleExportPdf = () => {
-    // Export API to be implemented later; use resumeToExportResume(resume, skills) for payload
-    void resumeToExportResume(resume, skills);
+    // Export API to be implemented later; use resumeToExportResume(resume, skillCategories) for payload
+    void resumeToExportResume(resume, skillCategories);
     alert('PDF export coming soon.');
   };
 
@@ -335,7 +369,7 @@ export default function BuilderPage() {
   const formPanelProps = {
     personalInfo: pi,
     summary: resume.summary ?? '',
-    skills,
+    skillCategories,
     experience,
     education,
     projects,
@@ -364,8 +398,11 @@ export default function BuilderPage() {
     setCertAt,
     addCertification,
     removeCertification,
-    addSkill,
-    removeSkill,
+    addCategory,
+    removeCategory,
+    setCategoryAt,
+    addSkillInCategory,
+    removeSkillInCategory,
   };
 
   const previewPanelProps = {
@@ -373,7 +410,7 @@ export default function BuilderPage() {
     summary: resume.summary ?? '',
     experience,
     education,
-    skills,
+    skillCategories,
     projects,
     certifications,
     onExportPdf: handleExportPdf,
