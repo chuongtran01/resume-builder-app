@@ -374,6 +374,8 @@ export default function BuilderPage() {
     experience,
     education,
     skills,
+    projects,
+    certifications,
     onExportPdf: handleExportPdf,
     onExportDocx: handleExportDocx,
   };
