@@ -93,7 +93,7 @@ export function ResumePreviewPanel({
               {experience.length > 0 && (
                 <div>
                   <h2 className={sectionTitleClass}>Experience</h2>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {experience.map((exp, i) => (
                       <div key={i} className="space-y-0">
                         <div className="flex justify-between items-baseline">
@@ -126,7 +126,7 @@ export function ResumePreviewPanel({
               {education.length > 0 && (
                 <div>
                   <h2 className={sectionTitleClass}>Education</h2>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {education.map((edu, i) => (
                       <div key={i} className="space-y-0">
                         <div className="flex justify-between items-baseline">
@@ -158,7 +158,7 @@ export function ResumePreviewPanel({
               {hasSkills && (
                 <div>
                   <h2 className={sectionTitleClass}>Skills</h2>
-                  <div className="space-y-1">
+                  <div className="space-y-0.5">
                     {skillCategories
                       .filter((c) => c.items.length > 0)
                       .map((cat, i) => (
@@ -175,7 +175,7 @@ export function ResumePreviewPanel({
               {certifications.length > 0 && (
                 <div>
                   <h2 className={sectionTitleClass}>Certifications</h2>
-                  <div className="space-y-1">
+                  <div className="space-y-0.5">
                     {certifications.map((cert, i) => (
                       <div key={i}>
                         <p className="font-bold">{cert.name}</p>
@@ -193,7 +193,7 @@ export function ResumePreviewPanel({
               {projects.length > 0 && (
                 <div>
                   <h2 className={sectionTitleClass}>Projects</h2>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {projects.map((proj, i) => (
                       <div key={i}>
                         <p className="font-bold">
