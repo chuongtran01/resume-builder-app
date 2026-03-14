@@ -1,4 +1,5 @@
 export { LABEL_CLASS } from './constants';
+export { EntryCollapsible } from './entry-collapsible';
 export { FormSectionCollapsible } from './form-section-collapsible';
 export { ContactSection } from './contact-section';
 export { SummarySection } from './summary-section';

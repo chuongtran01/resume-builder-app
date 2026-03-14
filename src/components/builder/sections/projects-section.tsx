@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import type { ProjectEntry } from '@/types/builder.types';
@@ -7,8 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { FormSectionCollapsible } from './form-section-collapsible';
+import { EntryCollapsible } from './entry-collapsible';
 import { LABEL_CLASS } from './constants';
 
 export interface ProjectsSectionProps {
@@ -28,6 +29,8 @@ export function ProjectsSection({
   addProject,
   removeProject,
 }: ProjectsSectionProps) {
+  const [openEntries, setOpenEntries] = useState<Record<string, boolean>>({});
+
   const triggerSlot = (
     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => { e.preventDefault(); addProject(); }}>
       <Plus className="h-4 w-4" />
@@ -42,16 +45,29 @@ export function ProjectsSection({
       optionalBadge
       triggerSlot={triggerSlot}
       defaultOpen={false}
-      contentClassName="overflow-hidden space-y-6"
+      contentClassName="overflow-hidden"
     >
+      <div className="space-y-6">
       {projects.map((proj, idx) => (
-        <div key={proj.id ?? idx} className="relative space-y-3">
-          <div className="absolute top-0 right-0">
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => removeProject(idx)}>
+        <EntryCollapsible
+          key={proj.id}
+          open={openEntries[proj.id] ?? false}
+          onOpenChange={(o) => setOpenEntries((prev) => ({ ...prev, [proj.id]: o }))}
+          title={proj.name || 'Untitled project'}
+          triggerSlot={
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={(e) => {
+                e.stopPropagation();
+                removeProject(idx);
+              }}
+            >
               <Trash2 className="h-4 w-4" />
             </Button>
-          </div>
-          <Separator className="mb-3" />
+          }
+        >
           <div className="space-y-3">
             <Label className={LABEL_CLASS}>Project Name</Label>
             <Input value={proj.name} onChange={(e) => setProjectAt(idx, (p) => ({ ...p, name: e.target.value }))} />
@@ -106,11 +122,12 @@ export function ProjectsSection({
               </Button>
             </div>
           </div>
-        </div>
+        </EntryCollapsible>
       ))}
       <Button variant="ghost" size="sm" onClick={addProject}>
         <Plus className="h-4 w-4 mr-1" /> Add project
       </Button>
+      </div>
     </FormSectionCollapsible>
   );
 }

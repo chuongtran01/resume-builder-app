@@ -1,15 +1,16 @@
 'use client';
 
+import { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import type { ExperienceEntry } from '@/types/builder.types';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Checkbox } from '@/components/ui/checkbox';
 import { FormSectionCollapsible } from './form-section-collapsible';
+import { EntryCollapsible } from './entry-collapsible';
 import { LABEL_CLASS } from './constants';
 
 export interface ExperienceSectionProps {
@@ -29,6 +30,8 @@ export function ExperienceSection({
   addExperience,
   removeExperience,
 }: ExperienceSectionProps) {
+  const [openEntries, setOpenEntries] = useState<Record<string, boolean>>({});
+
   const triggerSlot = (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -41,24 +44,43 @@ export function ExperienceSection({
   );
 
   return (
-    <FormSectionCollapsible open={open} onOpenChange={onToggle} title="Experience" triggerSlot={triggerSlot} contentClassName="overflow-hidden space-y-6">
+    <FormSectionCollapsible open={open} onOpenChange={onToggle} title="Experience" triggerSlot={triggerSlot} contentClassName="overflow-hidden">
+      <div className="space-y-6">
       {experience.length === 0 ? (
         <p className="text-sm text-foreground/50 font-sans">No experience yet. Click + to add.</p>
       ) : (
-        experience.map((exp, idx) => (
-          <div key={'id' in exp ? exp.id : idx} className="relative space-y-3">
-            <div className="absolute top-0 right-0">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => removeExperience(idx)}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Remove</TooltipContent>
-              </Tooltip>
-            </div>
-            <Separator className="mb-3" />
-            <div className="grid grid-cols-2 gap-3">
+        experience.map((exp, idx) => {
+          const title =
+            exp.role && exp.company
+              ? `${exp.role} at ${exp.company}`
+              : exp.role || exp.company || 'Untitled experience';
+          return (
+            <EntryCollapsible
+              key={exp.id}
+              open={openEntries[exp.id] ?? false}
+              onOpenChange={(o) => setOpenEntries((prev) => ({ ...prev, [exp.id]: o }))}
+              title={title}
+              triggerSlot={
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeExperience(idx);
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Remove</TooltipContent>
+                </Tooltip>
+              }
+            >
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
               <div className="col-span-2">
                 <Label className={LABEL_CLASS}>Job Title</Label>
                 <Input value={exp.role} onChange={(e) => setExperienceAt(idx, (entry) => ({ ...entry, role: e.target.value }))} />
@@ -149,12 +171,15 @@ export function ExperienceSection({
                 <Plus className="h-4 w-4 mr-1" /> Add bullet point
               </Button>
             </div>
-          </div>
-        ))
+              </div>
+            </EntryCollapsible>
+          );
+        })
       )}
       <Button variant="ghost" size="sm" onClick={addExperience}>
         <Plus className="h-4 w-4 mr-1" /> Add position
       </Button>
+      </div>
     </FormSectionCollapsible>
   );
 }
