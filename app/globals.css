@@ -20,6 +20,11 @@
     --success-foreground: #ffffff;
     --warning: #b45309;
     --warning-foreground: #ffffff;
+    --muted: #EDE9E0;
+    --muted-foreground: #6b7280;
+    /* Subtle hover/focus (button outline/ghost, dropdowns, etc.) – not the orange brand */
+    --accent: #EDE9E0;
+    --accent-foreground: #1A1714;
   }
 
   * {

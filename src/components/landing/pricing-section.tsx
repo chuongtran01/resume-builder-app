@@ -74,7 +74,7 @@ export function PricingSection({ plans = defaultPlans }: PricingSectionProps) {
               onCheckedChange={setIsAnnual}
             />
             <Label htmlFor="annual">
-              Annual <span className="text-accent">(20% off)</span>
+              Annual <span className="text-primary">(20% off)</span>
             </Label>
           </div>
         </div>
@@ -90,7 +90,7 @@ export function PricingSection({ plans = defaultPlans }: PricingSectionProps) {
                 viewport={animationViewport}
                 variants={fadeInUp}
                 className={`border p-8 ${plan.highlighted
-                  ? 'border-l-4 border-l-accent border-t border-r border-b border-border'
+                  ? 'border-l-4 border-l-primary border-t border-r border-b border-border'
                   : 'border-border'
                   }`}
               >

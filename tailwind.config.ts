@@ -21,8 +21,9 @@ const config: Config = {
         background: '#FAF9F6', // warm off-white
         'background-secondary': '#EDE9E0', // darker cream for testimonials
         foreground: '#1A1714', // dark brown-charcoal
-        accent: '#C4622D', // muted terracotta
         border: '#D6D0C8', // 1px dividers
+        accent: 'var(--accent)',
+        'accent-foreground': 'var(--accent-foreground)',
         // From globals.css :root (used by button and other UI)
         primary: 'var(--primary)',
         'primary-foreground': 'var(--primary-foreground)',
@@ -32,6 +33,8 @@ const config: Config = {
         'success-foreground': 'var(--success-foreground)',
         warning: 'var(--warning)',
         'warning-foreground': 'var(--warning-foreground)',
+        muted: 'var(--muted)',
+        'muted-foreground': 'var(--muted-foreground)',
       },
       fontFamily: {
         serif: ['Lora', 'serif'],

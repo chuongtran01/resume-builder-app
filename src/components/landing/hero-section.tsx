@@ -27,7 +27,7 @@ export function HeroSection() {
             <div className="space-y-3">
               <Link
                 href="/builder"
-                className="inline-block bg-accent text-white px-8 py-3 rounded-sm font-sans text-sm hover:opacity-90 transition-opacity"
+                className="inline-block bg-primary text-primary-foreground px-8 py-3 rounded-sm font-sans text-sm hover:opacity-90 transition-opacity"
               >
                 Build Your Resume
               </Link>

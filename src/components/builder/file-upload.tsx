@@ -91,8 +91,8 @@ export function FileUpload({
         onDrop={handleDrop}
         className={`
           border-2 border-dashed rounded-sm p-8 text-center transition-colors
-          ${isDragging ? 'border-accent bg-accent/5' : 'border-border'}
-          ${isProcessing ? 'opacity-50 pointer-events-none' : 'cursor-pointer hover:border-accent/50'}
+          ${isDragging ? 'border-primary bg-primary/5' : 'border-border'}
+          ${isProcessing ? 'opacity-50 pointer-events-none' : 'cursor-pointer hover:border-primary/50'}
         `}
         onClick={() => fileInputRef.current?.click()}
       >
