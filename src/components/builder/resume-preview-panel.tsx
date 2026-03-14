@@ -219,42 +219,49 @@ export function ResumePreviewPanel({
                 </div>
               )}
 
-              {/* Projects: name (+ link) then description and technologies */}
+              {/* Projects: name (+ link) then description and technologies (like exp: only show bullets when non-empty) */}
               {projects.length > 0 && (
                 <div>
                   <h2 className={sectionTitleClass}>Projects</h2>
                   <div className="space-y-1">
-                    {projects.map((proj, i) => (
-                      <div key={i}>
-                        <p className="font-bold">
-                          {proj.name}
-                          {proj.url && (
-                            <>
-                              {' | '}
-                              <a href={proj.url} className="underline" target="_blank" rel="noopener noreferrer">
-                                Website
-                              </a>
-                            </>
-                          )}
-                          {proj.github && (
-                            <>
-                              {' | '}
-                              <a href={proj.github} className="underline" target="_blank" rel="noopener noreferrer">
-                                GitHub
-                              </a>
-                            </>
-                          )}
-                        </p>
-                        <ul className="ml-4 list-disc space-y-0">
-                          {(proj.bulletPoints ?? []).map((point, j) => (
-                            <li key={j}>{point}</li>
-                          ))}
-                          {proj.technologies && proj.technologies.length > 0 && (
-                            <li>Technologies: {proj.technologies.join(', ')}</li>
-                          )}
-                        </ul>
-                      </div>
-                    ))}
+                    {projects.map((proj, i) => {
+                      const bulletPoints = (proj.bulletPoints ?? []).filter((point) => point.trim() !== '');
+                      const hasTechnologies = proj.technologies && proj.technologies.length > 0;
+                      const showBulletList = bulletPoints.length > 0 || hasTechnologies;
+                      return (
+                        <div key={i}>
+                          <p className="font-bold">
+                            {proj.name || '(Project)'}
+                            {proj.url && (
+                              <>
+                                {' | '}
+                                <a href={proj.url} className="underline" target="_blank" rel="noopener noreferrer">
+                                  Website
+                                </a>
+                              </>
+                            )}
+                            {proj.github && (
+                              <>
+                                {' | '}
+                                <a href={proj.github} className="underline" target="_blank" rel="noopener noreferrer">
+                                  GitHub
+                                </a>
+                              </>
+                            )}
+                          </p>
+                          {showBulletList ? (
+                            <ul className="ml-4 list-disc space-y-0">
+                              {bulletPoints.map((point, j) => (
+                                <li key={j}>{point}</li>
+                              ))}
+                              {hasTechnologies && (
+                                <li>Technologies: {proj.technologies!.join(', ')}</li>
+                              )}
+                            </ul>
+                          ) : null}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
