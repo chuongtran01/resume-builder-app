@@ -32,7 +32,7 @@ export function FormSectionCollapsible({
   contentClassName,
 }: FormSectionCollapsibleProps) {
   return (
-    <div className="rounded-md border border-input bg-card shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+    <div className="rounded-sm border border-input bg-card shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       <Collapsible open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
         <CollapsibleTrigger asChild>
           <div className="w-full flex items-center justify-between gap-2 py-4 px-4 text-left cursor-pointer bg-muted/40 hover:bg-muted/60 transition-colors">
