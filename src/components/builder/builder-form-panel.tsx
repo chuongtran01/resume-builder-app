@@ -131,7 +131,7 @@ export function BuilderFormPanel({
         </div>
       )}
       <ScrollArea className="flex-1 pr-3 -mr-3">
-        <div className="space-y-1 pb-24">
+        <div className="space-y-4 pb-24">
           <ContactSection
             personalInfo={pi}
             importJustDone={importJustDone}
