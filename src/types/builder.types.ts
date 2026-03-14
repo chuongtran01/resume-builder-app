@@ -22,11 +22,11 @@ export const SECTION_IDS = [
 export type SectionId = (typeof SECTION_IDS)[number];
 
 export const DEFAULT_SECTION_OPEN: Record<SectionId, boolean> = {
-  contact: true,
-  summary: true,
-  experience: true,
-  education: true,
-  skills: true,
+  contact: false,
+  summary: false,
+  experience: false,
+  education: false,
+  skills: false,
   projects: false,
   certifications: false,
 };
