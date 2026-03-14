@@ -107,8 +107,8 @@ export interface Certification {
 export interface Project {
   /** Project name */
   name: string;
-  /** Project description */
-  description: string;
+  /** Bullet points / description points (one per item) */
+  bulletPoints: string[];
   /** Technologies used */
   technologies?: string[];
   /** Project URL (optional) */

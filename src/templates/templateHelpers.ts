@@ -216,11 +216,10 @@ export function estimateContentDensity(resume: Resume): 'compact' | 'normal' {
     const proj = Array.isArray(resume.projects) ? resume.projects : [resume.projects];
     itemCount += proj.length;
     proj.forEach((project) => {
-      if (typeof project === 'object' && project !== null && 'description' in project) {
-        const desc = project.description;
-        if (typeof desc === 'string') {
-          totalTextLength += desc.length;
-        }
+      if (typeof project === 'object' && project !== null && 'bulletPoints' in project && Array.isArray((project as { bulletPoints: string[] }).bulletPoints)) {
+        (project as { bulletPoints: string[] }).bulletPoints.forEach((point) => {
+          totalTextLength += point.length;
+        });
       }
     });
   }

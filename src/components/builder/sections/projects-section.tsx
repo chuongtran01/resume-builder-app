@@ -1,12 +1,12 @@
 'use client';
 
-import { Plus, Trash2, X } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import type { ProjectEntry } from '@/types/builder.types';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { FormSectionCollapsible } from './form-section-collapsible';
 import { LABEL_CLASS } from './constants';
@@ -57,33 +57,53 @@ export function ProjectsSection({
             <Input value={proj.name} onChange={(e) => setProjectAt(idx, (p) => ({ ...p, name: e.target.value }))} />
             <Label className={LABEL_CLASS}>URL</Label>
             <Input value={proj.url ?? ''} onChange={(e) => setProjectAt(idx, (p) => ({ ...p, url: e.target.value }))} />
-            <Label className={LABEL_CLASS}>Description</Label>
-            <Textarea value={proj.description} onChange={(e) => setProjectAt(idx, (p) => ({ ...p, description: e.target.value }))} className="min-h-[80px]" />
-            <Label className={LABEL_CLASS}>Tech stack (Enter to add)</Label>
-            <Input
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  const v = (e.target as HTMLInputElement).value.trim();
-                  if (v) setProjectAt(idx, (p) => ({ ...p, technologies: [...(p.technologies || []), v] }));
-                  (e.target as HTMLInputElement).value = '';
-                }
-              }}
-            />
-            <div className="flex flex-wrap gap-2">
-              {(proj.technologies || []).map((t, i) => (
-                <Badge key={t} variant="outline" className="gap-1">
-                  {t}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-4 w-4 p-0"
-                    onClick={() => setProjectAt(idx, (p) => ({ ...p, technologies: (p.technologies || []).filter((_, j) => j !== i) }))}
-                  >
-                    <X className="h-3 w-3" />
-                  </Button>
-                </Badge>
+            <div className="space-y-2">
+              <Label className={LABEL_CLASS}>Bullet points</Label>
+              {(proj.bulletPoints ?? ['']).map((bullet, bulletIdx) => (
+                <div key={bulletIdx} className="flex gap-2 items-start">
+                  <Textarea
+                    className="min-h-[60px] flex-1"
+                    value={bullet}
+                    onChange={(e) =>
+                      setProjectAt(idx, (p) => {
+                        const next = [...p.bulletPoints];
+                        next[bulletIdx] = e.target.value;
+                        return { ...p, bulletPoints: next };
+                      })
+                    }
+                    placeholder={`Bullet ${bulletIdx + 1}`}
+                  />
+                  {(proj.bulletPoints ?? []).length > 1 && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 shrink-0 mt-0.5"
+                          onClick={() =>
+                            setProjectAt(idx, (p) => ({
+                              ...p,
+                              bulletPoints: p.bulletPoints.filter((_, i) => i !== bulletIdx),
+                            }))
+                          }
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Remove bullet</TooltipContent>
+                    </Tooltip>
+                  )}
+                </div>
               ))}
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setProjectAt(idx, (p) => ({ ...p, bulletPoints: [...p.bulletPoints, ''] }))}
+              >
+                <Plus className="h-4 w-4 mr-1" /> Add bullet point
+              </Button>
             </div>
           </div>
         </div>

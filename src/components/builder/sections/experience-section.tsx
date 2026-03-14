@@ -101,18 +101,53 @@ export function ExperienceSection({
                 </div>
               </div>
             </div>
-            <div>
-              <Label className={LABEL_CLASS}>Bullet points (one per line)</Label>
-              <Textarea
-                className="min-h-[80px]"
-                value={(exp.bulletPoints || []).join('\n')}
-                onChange={(e) =>
-                  setExperienceAt(idx, (entry) => ({
-                    ...entry,
-                    bulletPoints: e.target.value.split('\n').filter(Boolean).length ? e.target.value.split('\n') : [''],
-                  }))
-                }
-              />
+            <div className="space-y-2">
+              <Label className={LABEL_CLASS}>Bullet points</Label>
+              {(exp.bulletPoints?.length ? exp.bulletPoints : ['']).map((bullet, bulletIdx) => (
+                <div key={bulletIdx} className="flex gap-2 items-start">
+                  <Textarea
+                    className="min-h-[60px] flex-1"
+                    value={bullet}
+                    onChange={(e) =>
+                      setExperienceAt(idx, (entry) => {
+                        const next = [...(entry.bulletPoints || [''])];
+                        next[bulletIdx] = e.target.value;
+                        return { ...entry, bulletPoints: next };
+                      })
+                    }
+                    placeholder={`Bullet ${bulletIdx + 1}`}
+                  />
+                  {(exp.bulletPoints?.length ?? 1) > 1 && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 shrink-0 mt-0.5"
+                          onClick={() =>
+                            setExperienceAt(idx, (entry) => ({
+                              ...entry,
+                              bulletPoints: (entry.bulletPoints || []).filter((_, i) => i !== bulletIdx),
+                            }))
+                          }
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Remove bullet</TooltipContent>
+                    </Tooltip>
+                  )}
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setExperienceAt(idx, (e) => ({ ...e, bulletPoints: [...(e.bulletPoints || []), ''] }))}
+              >
+                <Plus className="h-4 w-4 mr-1" /> Add bullet point
+              </Button>
             </div>
           </div>
         ))

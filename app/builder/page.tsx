@@ -50,7 +50,7 @@ function newProj(): ProjectEntry {
   return {
     id: crypto.randomUUID(),
     name: '',
-    description: '',
+    bulletPoints: [''],
     url: '',
     technologies: [],
   };
@@ -166,7 +166,11 @@ export default function BuilderPage() {
             (r as { education: (Education & { id?: string })[] }).education = r.education.map((e) => ({ ...e, id: (e as EducationEntry).id ?? crypto.randomUUID() }));
           }
           if (Array.isArray(r.projects)) {
-            (r as { projects: (Project & { id?: string })[] }).projects = r.projects.map((p) => ({ ...p, id: (p as ProjectEntry).id ?? crypto.randomUUID() }));
+            (r as { projects: (Project & { id?: string })[] }).projects = r.projects.map((p) => ({
+              ...p,
+              id: (p as ProjectEntry).id ?? crypto.randomUUID(),
+              bulletPoints: p.bulletPoints ?? ((p as unknown as { description?: string }).description ? [(p as unknown as { description: string }).description] : ['']),
+            }));
           }
           if (Array.isArray(r.certifications)) {
             (r as { certifications: (Certification & { id?: string })[] }).certifications = r.certifications.map((c) => ({ ...c, id: (c as CertificationEntry).id ?? crypto.randomUUID() }));
@@ -342,7 +346,15 @@ export default function BuilderPage() {
   };
 
   const handleImportSuccess = (parsed: Partial<Resume>) => {
-    setResume(parsed);
+    const r = { ...parsed };
+    if (Array.isArray(r.projects)) {
+      (r as { projects: (Project & { id?: string })[] }).projects = r.projects.map((p) => ({
+        ...p,
+        id: (p as ProjectEntry).id ?? crypto.randomUUID(),
+        bulletPoints: p.bulletPoints ?? ((p as unknown as { description?: string }).description ? [(p as unknown as { description: string }).description] : ['']),
+      }));
+    }
+    setResume(r);
     const skillsSection = parsed.skills;
     if (skillsSection && typeof skillsSection === 'object' && 'categories' in skillsSection && Array.isArray((skillsSection as { categories: SkillCategory[] }).categories)) {
       const cats = (skillsSection as { categories: SkillCategory[] }).categories;

@@ -553,11 +553,14 @@ function renderProjects(projects: Resume['projects']): string {
         ? `<li>Technologies: ${project.technologies.map((t) => escapeHtml(t)).join(', ')}</li>`
         : '';
 
+      const descriptionBullets = project.bulletPoints ?? [];
+      const descriptionLis = descriptionBullets.map((point) => `<li>${escapeHtml(point)}</li>`).join('');
+
       return `
         <div class="project-item">
           <div class="project-name">${escapeHtml(project.name)}${linksHtml}</div>
           <ul class="bullet-points">
-            <li>${escapeHtml(project.description)}</li>
+            ${descriptionLis}
             ${technologiesBullet}
           </ul>
         </div>

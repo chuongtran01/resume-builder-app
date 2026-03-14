@@ -246,7 +246,9 @@ export function ResumePreviewPanel({
                           )}
                         </p>
                         <ul className="ml-4 list-disc space-y-0">
-                          <li>{proj.description}</li>
+                          {(proj.bulletPoints ?? []).map((point, j) => (
+                            <li key={j}>{point}</li>
+                          ))}
                           {proj.technologies && proj.technologies.length > 0 && (
                             <li>Technologies: {proj.technologies.join(', ')}</li>
                           )}
