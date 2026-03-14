@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -389,12 +390,9 @@ export default function BuilderPage() {
     sectionOpen,
     hasData: Boolean(hasData),
     savedVisible,
-    showClearConfirm,
     importJustDone,
     onImportClick: () => { setShowImportDialog(true); setImportError(null); },
     onRequestClearAll: () => setShowClearConfirm(true),
-    onConfirmClearAll: clearAll,
-    onClearCancel: () => setShowClearConfirm(false),
     toggleSection,
     onPersonalChange: handlePersonal,
     onSummaryChange: (value: string) => setResumeAndMarkSave((p) => ({ ...p, summary: value })),
@@ -460,6 +458,30 @@ export default function BuilderPage() {
           </div>
         </div>
       </div>
+
+      <Dialog open={showClearConfirm} onOpenChange={setShowClearConfirm}>
+        <DialogContent className="max-w-[400px] bg-[#FAF9F6] border-[#D6D0C8]">
+          <DialogHeader>
+            <DialogTitle className="font-serif">Clear all?</DialogTitle>
+            <DialogDescription>
+              This will remove all your resume data. This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => setShowClearConfirm(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                clearAll();
+              }}
+            >
+              Clear all
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
         <DialogContent className="max-w-[480px] bg-[#FAF9F6] border-[#D6D0C8]">

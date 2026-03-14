@@ -23,6 +23,15 @@ const config: Config = {
         foreground: '#1A1714', // dark brown-charcoal
         accent: '#C4622D', // muted terracotta
         border: '#D6D0C8', // 1px dividers
+        // From globals.css :root (used by button and other UI)
+        primary: 'var(--primary)',
+        'primary-foreground': 'var(--primary-foreground)',
+        destructive: 'var(--destructive)',
+        'destructive-foreground': 'var(--destructive-foreground)',
+        success: 'var(--success)',
+        'success-foreground': 'var(--success-foreground)',
+        warning: 'var(--warning)',
+        'warning-foreground': 'var(--warning-foreground)',
       },
       fontFamily: {
         serif: ['Lora', 'serif'],

@@ -27,12 +27,9 @@ export interface BuilderFormPanelProps {
   sectionOpen: Record<string, boolean>;
   hasData: boolean;
   savedVisible: boolean;
-  showClearConfirm: boolean;
   importJustDone: boolean;
   onImportClick: () => void;
   onRequestClearAll: () => void;
-  onConfirmClearAll: () => void;
-  onClearCancel: () => void;
   toggleSection: (id: SectionId) => void;
   onPersonalChange: (field: string, value: string) => void;
   onSummaryChange: (value: string) => void;
@@ -66,12 +63,9 @@ export function BuilderFormPanel({
   sectionOpen,
   hasData,
   savedVisible,
-  showClearConfirm,
   importJustDone,
   onImportClick,
   onRequestClearAll,
-  onConfirmClearAll,
-  onClearCancel,
   toggleSection,
   onPersonalChange,
   onSummaryChange,
@@ -123,13 +117,6 @@ export function BuilderFormPanel({
           )}
         </div>
       </div>
-      {showClearConfirm && (
-        <div className="mb-4 flex items-center gap-2 text-sm">
-          <span className="text-foreground/70 font-sans">Are you sure?</span>
-          <Button variant="ghost" size="sm" onClick={onConfirmClearAll}>Confirm</Button>
-          <Button variant="ghost" size="sm" onClick={onClearCancel}>Cancel</Button>
-        </div>
-      )}
       <ScrollArea className="flex-1 pr-3 -mr-3">
         <div className="space-y-4 pb-24">
           <ContactSection

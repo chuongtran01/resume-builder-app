@@ -14,6 +14,12 @@
     --foreground: #1A1714;
     --primary: #C4622D;
     --primary-foreground: #ffffff;
+    --destructive: #b91c1c;
+    --destructive-foreground: #ffffff;
+    --success: #15803d;
+    --success-foreground: #ffffff;
+    --warning: #b45309;
+    --warning-foreground: #ffffff;
   }
 
   * {
