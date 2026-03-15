@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,7 +10,6 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { PasswordInput } from '@/components/auth/password-input';
 import { GoogleIcon } from '@/components/auth/google-icon';
-import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
@@ -25,6 +25,7 @@ function isValidEmail(value: string): boolean {
 type Tab = 'signin' | 'signup';
 
 export function AuthForm(): React.ReactElement {
+  const router = useRouter();
   const [tab, setTab] = React.useState<Tab>('signin');
   const [success, setSuccess] = React.useState<'signin' | 'signup' | null>(null);
   const [loading, setLoading] = React.useState(false);
@@ -135,9 +136,7 @@ export function AuthForm(): React.ReactElement {
       {
         onSuccess: () => {
           setLoading(false);
-          resetForms();
-          toast.success('Account created successfully. You can sign in now.');
-          setTab('signin');
+          router.push('/');
         },
         onError: (ctx) => {
           setLoading(false);
