@@ -59,3 +59,5 @@ Thumbs.db
 
 # Resume files
 resumes/
+
+/generated/prisma

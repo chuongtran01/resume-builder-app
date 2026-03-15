@@ -48,6 +48,9 @@
       "@/lib/*": [
         "./lib/*"
       ],
+      "@/generated/*": [
+        "./generated/*"
+      ],
       "@templates/*": [
         "./src/templates/*"
       ],
