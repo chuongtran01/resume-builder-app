@@ -223,9 +223,11 @@ export async function generatePdfFromHtml(
     // Create new page
     page = await browser.newPage();
 
-    // Set content with timeout
+    // Set content with timeout. Use domcontentloaded so we don't wait for external
+    // resources (e.g. fonts); the HTML string is self-contained and networkidle0
+    // can hang or timeout in server environments.
     await Promise.race([
-      page.setContent(html, { waitUntil: 'networkidle0' }),
+      page.setContent(html, { waitUntil: 'domcontentloaded' }),
       new Promise((_, reject) =>
         setTimeout(() => reject(new Error('HTML loading timeout')), timeout)
       ),

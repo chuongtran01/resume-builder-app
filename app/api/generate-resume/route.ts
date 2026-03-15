@@ -2,6 +2,7 @@
  * POST /api/generate-resume - Generate resume from JSON
  */
 
+import '@templates/index'; // Register classic, modern templates
 import { NextRequest, NextResponse } from 'next/server';
 import * as fs from 'fs-extra';
 import * as path from 'path';
@@ -91,12 +92,14 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error) {
     const duration = Date.now() - startTime;
-    logger.error(`[${requestId}] Error generating resume (${duration}ms): ${error instanceof Error ? error.message : String(error)}`);
 
-    // If it's already a NextResponse (from validation), re-throw it
+    // If it's already a NextResponse (from validation), return it without logging as error
     if (error instanceof NextResponse) {
-      throw error;
+      logger.info(`[${requestId}] Request validation failed (${duration}ms)`);
+      return error;
     }
+
+    logger.error(`[${requestId}] Error generating resume (${duration}ms): ${error instanceof Error ? error.message : String(error)}`);
 
     if (error instanceof TemplateNotFoundError) {
       // Get available templates for error response

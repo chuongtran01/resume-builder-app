@@ -35,8 +35,8 @@ const experienceSchema = z.object({
 const educationSchema = z.object({
   institution: z.string().min(1, 'Institution name is required'),
   degree: z.string().min(1, 'Degree is required'),
-  field: z.string().min(1, 'Field of study is required'),
-  graduationDate: z.string().regex(/^\d{4}-\d{2}$/, 'Graduation date must be in YYYY-MM format'),
+  field: z.string().optional(),
+  graduationDate: z.string().regex(/^\d{4}(-\d{2})?$/, 'Graduation date must be in YYYY or YYYY-MM format'),
   gpa: z.string().optional(),
   honors: z.array(z.string()).optional(),
 });
@@ -74,8 +74,8 @@ const projectSchema = z.object({
   name: z.string().min(1, 'Project name is required'),
   bulletPoints: z.array(z.string()).min(1, 'At least one bullet point is required'),
   technologies: z.array(z.string().min(1, 'Technology cannot be empty')),
-  url: z.string().url('Invalid URL').optional(),
-  github: z.string().url('Invalid GitHub URL').optional(),
+  url: z.union([z.string().url(), z.literal('')]).optional(),
+  github: z.union([z.string().url(), z.literal('')]).optional(),
 });
 
 /**

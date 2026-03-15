@@ -24,6 +24,7 @@ export interface ResumePreviewPanelProps {
   certifications?: CertificationEntry[];
   onExportPdf: () => void;
   onExportDocx?: () => void;
+  isExportingPdf?: boolean;
 }
 
 function buildContactParts(pi: PersonalInfo | undefined): string[] {
@@ -48,6 +49,7 @@ export function ResumePreviewPanel({
   certifications = [],
   onExportPdf,
   onExportDocx,
+  isExportingPdf = false,
 }: ResumePreviewPanelProps) {
   const contactParts = buildContactParts(pi);
   const contactLine = contactParts.join(' | ');
@@ -69,14 +71,14 @@ export function ResumePreviewPanel({
       <div className="shrink-0 border-b border-border bg-background shadow-sm py-3.5 flex items-center justify-end flex-wrap gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled={isExportingPdf}>
               <Download className="h-4 w-4 mr-2" />
-              Download
+              {isExportingPdf ? 'Generating...' : 'Download'}
               <ChevronDown className="h-4 w-4 ml-1.5 opacity-60" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={onExportPdf}>
+            <DropdownMenuItem onClick={onExportPdf} disabled={isExportingPdf}>
               <FileText className="h-4 w-4 mr-2" />
               PDF
             </DropdownMenuItem>

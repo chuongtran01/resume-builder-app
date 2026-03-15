@@ -4,10 +4,12 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload } from 'lucide-react';
+import { toast } from 'sonner';
 import type { Resume, Experience, Education, Project, Certification, SkillCategory } from '@resume-types/resume.types';
 import type { ExperienceEntry, EducationEntry, ProjectEntry, CertificationEntry, SectionId } from '@/types/builder.types';
 import { DEFAULT_SECTION_OPEN } from '@/types/builder.types';
 import { parseDocument } from '@/utils/documentParser';
+import { generateResume } from '@/lib/api-client';
 import { BuilderFormPanel } from '@/components/builder/builder-form-panel';
 import { ResumePreviewPanel } from '@/components/builder/resume-preview-panel';
 import {
@@ -119,6 +121,7 @@ export default function BuilderPage() {
   const [importJustDone, setImportJustDone] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [savedVisible, setSavedVisible] = useState(false);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<'edit' | 'preview'>('edit');
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -368,15 +371,32 @@ export default function BuilderPage() {
     setTimeout(() => setImportJustDone(false), 2000);
   };
 
-  const handleExportPdf = () => {
-    // Export API to be implemented later; use resumeToExportResume(resume, skillCategories) for payload
-    void resumeToExportResume(resume, skillCategories);
-    alert('PDF export coming soon.');
+  const handleExportPdf = async () => {
+    const payload = resumeToExportResume(resume, skillCategories);
+    if (!payload.experience?.length) {
+      toast.error('Add at least one experience to download PDF.');
+      return;
+    }
+    if (isExportingPdf) return;
+    setIsExportingPdf(true);
+    try {
+      const blob = await generateResume(payload as Resume, { template: 'classic', format: 'pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'resume.pdf';
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success('Resume downloaded');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to generate PDF');
+    } finally {
+      setIsExportingPdf(false);
+    }
   };
 
   const handleExportDocx = () => {
-    // Export API to be implemented later
-    alert('DOCX export coming soon.');
+    toast.info('DOCX export coming soon.');
   };
 
   const formPanelProps = {
@@ -425,6 +445,7 @@ export default function BuilderPage() {
     certifications,
     onExportPdf: handleExportPdf,
     onExportDocx: handleExportDocx,
+    isExportingPdf,
   };
 
   return (

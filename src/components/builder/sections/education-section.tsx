@@ -47,16 +47,20 @@ export function EducationSection({
             <Separator className="mb-3" />
             <div className="grid grid-cols-2 gap-3">
               <div className="col-span-2">
-                <Label className={LABEL_CLASS}>Degree</Label>
-                <Input value={edu.degree} onChange={(e) => setEducationAt(idx, (eduEntry) => ({ ...eduEntry, degree: e.target.value }))} />
-              </div>
-              <div className="col-span-2">
                 <Label className={LABEL_CLASS}>Institution</Label>
-                <Input value={edu.institution} onChange={(e) => setEducationAt(idx, (eduEntry) => ({ ...eduEntry, institution: e.target.value }))} />
+                <Input value={edu.institution} onChange={(e) => setEducationAt(idx, (eduEntry) => ({ ...eduEntry, institution: e.target.value }))} placeholder="e.g. University of Houston" />
               </div>
               <div>
-                <Label className={LABEL_CLASS}>Graduation Year</Label>
-                <Input value={edu.graduationDate} onChange={(e) => setEducationAt(idx, (eduEntry) => ({ ...eduEntry, graduationDate: e.target.value }))} placeholder="YYYY" />
+                <Label className={LABEL_CLASS}>Degree</Label>
+                <Input value={edu.degree} onChange={(e) => setEducationAt(idx, (eduEntry) => ({ ...eduEntry, degree: e.target.value }))} placeholder="e.g. B.S." />
+              </div>
+              <div>
+                <Label className={LABEL_CLASS}>Field</Label>
+                <Input value={edu.field ?? ''} onChange={(e) => setEducationAt(idx, (eduEntry) => ({ ...eduEntry, field: e.target.value }))} placeholder="e.g. Computer Science" />
+              </div>
+              <div>
+                <Label className={LABEL_CLASS}>Graduation date (YYYY-MM)</Label>
+                <Input value={edu.graduationDate} onChange={(e) => setEducationAt(idx, (eduEntry) => ({ ...eduEntry, graduationDate: e.target.value }))} placeholder="e.g. 2024-06" />
               </div>
               <div>
                 <Label className={LABEL_CLASS}>GPA</Label>
