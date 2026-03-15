@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { PasswordInput } from '@/components/auth/password-input';
 import { GoogleIcon } from '@/components/auth/google-icon';
+import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
@@ -134,7 +135,9 @@ export function AuthForm(): React.ReactElement {
       {
         onSuccess: () => {
           setLoading(false);
-          setSuccess('signup');
+          resetForms();
+          toast.success('Account created successfully. You can sign in now.');
+          setTab('signin');
         },
         onError: (ctx) => {
           setLoading(false);
