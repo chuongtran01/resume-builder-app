@@ -9,14 +9,6 @@ import { DEFAULT_SECTION_OPEN } from '@/types/builder.types';
 import { generateResume } from '@/lib/api-client';
 import { BuilderFormPanel } from '@/components/builder/builder-form-panel';
 import { ResumePreviewPanel } from '@/components/builder/resume-preview-panel';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
@@ -109,7 +101,6 @@ export default function BuilderPage() {
   const [resume, setResume] = useState<Partial<Resume>>({});
   const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([{ name: 'Skills', items: [] }]);
   const [sectionOpen, setSectionOpen] = useState<Record<string, boolean>>(DEFAULT_SECTION_OPEN);
-  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [savedVisible, setSavedVisible] = useState(false);
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<'edit' | 'preview'>('edit');
@@ -314,13 +305,6 @@ export default function BuilderPage() {
     }));
   };
 
-  const clearAll = () => {
-    setResume({});
-    setSkillCategories([{ name: 'Skills', items: [] }]);
-    localStorage.removeItem(DRAFT_STORAGE_KEY);
-    setShowClearConfirm(false);
-  };
-
   const handleExportPdf = async () => {
     const payload = resumeToExportResume(resume, skillCategories);
     if (!payload.experience?.length) {
@@ -358,9 +342,7 @@ export default function BuilderPage() {
     projects,
     certifications,
     sectionOpen,
-    hasData: Boolean(hasData),
     savedVisible,
-    onRequestClearAll: () => setShowClearConfirm(true),
     toggleSection,
     onPersonalChange: handlePersonal,
     onSummaryChange: (value: string) => setResumeAndMarkSave((p) => ({ ...p, summary: value })),
@@ -427,30 +409,6 @@ export default function BuilderPage() {
           </div>
         </div>
       </div>
-
-      <Dialog open={showClearConfirm} onOpenChange={setShowClearConfirm}>
-        <DialogContent className="max-w-[400px] bg-[#FAF9F6] border-[#D6D0C8]">
-          <DialogHeader>
-            <DialogTitle className="font-serif">Clear all?</DialogTitle>
-            <DialogDescription>
-              This will remove all your resume data. This cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" onClick={() => setShowClearConfirm(false)}>
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() => {
-                clearAll();
-              }}
-            >
-              Clear all
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </TooltipProvider>
   );
 }

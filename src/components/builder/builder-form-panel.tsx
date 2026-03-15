@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion';
 import type { PersonalInfo, SkillCategory } from '@resume-types/resume.types';
 import type { ExperienceEntry, EducationEntry, ProjectEntry, CertificationEntry, SectionId } from '@/types/builder.types';
-import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   ContactSection,
@@ -24,9 +23,7 @@ export interface BuilderFormPanelProps {
   projects: ProjectEntry[];
   certifications: CertificationEntry[];
   sectionOpen: Record<string, boolean>;
-  hasData: boolean;
   savedVisible: boolean;
-  onRequestClearAll: () => void;
   toggleSection: (id: SectionId) => void;
   onPersonalChange: (field: string, value: string) => void;
   onSummaryChange: (value: string) => void;
@@ -58,9 +55,7 @@ export function BuilderFormPanel({
   projects,
   certifications,
   sectionOpen,
-  hasData,
   savedVisible,
-  onRequestClearAll,
   toggleSection,
   onPersonalChange,
   onSummaryChange,
@@ -84,17 +79,10 @@ export function BuilderFormPanel({
 }: BuilderFormPanelProps) {
   return (
     <div className="flex flex-col h-full">
-      <p className="text-[11px] uppercase tracking-widest font-sans text-foreground/50 mb-3">
+      <p className="text-base uppercase tracking-widest font-sans  mb-3">
         YOUR INFORMATION
       </p>
       <div className="flex items-center justify-between gap-2 mb-4">
-        <div className="flex gap-2">
-          {hasData && (
-            <Button variant="ghost" size="sm" className="text-foreground/60" onClick={onRequestClearAll}>
-              Clear All
-            </Button>
-          )}
-        </div>
         <div className="flex items-center gap-2">
           {savedVisible && (
             <motion.div
