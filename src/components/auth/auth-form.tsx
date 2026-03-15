@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { PasswordInput } from '@/components/auth/password-input';
 import { GoogleIcon } from '@/components/auth/google-icon';
+import { authClient } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
 const LABEL_CLASS =
@@ -79,13 +80,23 @@ export function AuthForm(): React.ReactElement {
     if (Object.keys(errors).length > 0) return;
 
     setLoading(true);
-    // TODO: replace with real auth (NextAuth / Supabase / Clerk)
-    setTimeout(() => {
-      // eslint-disable-next-line no-console -- intentional log on submit per spec
-      console.log('Sign In', { email: signInEmail, password: signInPassword });
-      setLoading(false);
-      setSuccess('signin');
-    }, 1500);
+    void authClient.signIn.email(
+      {
+        email: signInEmail.trim(),
+        password: signInPassword,
+        callbackURL: '/',
+      },
+      {
+        onSuccess: () => {
+          setLoading(false);
+          setSuccess('signin');
+        },
+        onError: (ctx) => {
+          setLoading(false);
+          setAuthError(ctx.error.message ?? 'Sign in failed');
+        },
+      }
+    );
   };
 
   const handleSignUpSubmit = (e: React.FormEvent): void => {
@@ -108,18 +119,29 @@ export function AuthForm(): React.ReactElement {
     if (Object.keys(errors).length > 0) return;
 
     setLoading(true);
-    // TODO: replace with real auth (NextAuth / Supabase / Clerk)
-    setTimeout(() => {
-      // eslint-disable-next-line no-console -- intentional log on submit per spec
-      console.log('Sign Up', {
-        firstName: signUpFirstName,
-        lastName: signUpLastName,
-        email: signUpEmail,
+    const firstName = signUpFirstName.trim();
+    const lastName = signUpLastName.trim();
+    const name = `${firstName} ${lastName}`.trim() || signUpEmail.trim();
+    void authClient.signUp.email(
+      {
+        email: signUpEmail.trim(),
         password: signUpPassword,
-      });
-      setLoading(false);
-      setSuccess('signup');
-    }, 1500);
+        name,
+        firstName,
+        lastName,
+        callbackURL: '/',
+      },
+      {
+        onSuccess: () => {
+          setLoading(false);
+          setSuccess('signup');
+        },
+        onError: (ctx) => {
+          setLoading(false);
+          setAuthError(ctx.error.message ?? 'Sign up failed');
+        },
+      }
+    );
   };
 
   if (success) {
