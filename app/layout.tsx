@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Navigation } from '@/components/navigation';
+import { NavigationConditional } from '@/components/navigation-conditional';
 import { QueryProvider } from '@/components/providers/query-provider';
 import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
@@ -19,7 +19,7 @@ export default function RootLayout({
       <body>
         <QueryProvider>
           <Toaster position="top-right" richColors />
-          <Navigation />
+          <NavigationConditional />
           <main>{children}</main>
         </QueryProvider>
       </body>
