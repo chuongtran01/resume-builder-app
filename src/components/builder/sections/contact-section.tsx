@@ -8,7 +8,6 @@ import { LABEL_CLASS } from './constants';
 
 export interface ContactSectionProps {
   personalInfo: PersonalInfo | undefined;
-  importJustDone: boolean;
   open: boolean;
   onToggle: () => void;
   onChange: (field: string, value: string) => void;
@@ -16,7 +15,6 @@ export interface ContactSectionProps {
 
 export function ContactSection({
   personalInfo: pi,
-  importJustDone,
   open,
   onToggle,
   onChange,
@@ -29,7 +27,6 @@ export function ContactSection({
           value={pi?.name ?? ''}
           onChange={(e) => onChange('name', e.target.value)}
           placeholder="John Doe"
-          className={importJustDone ? 'bg-[#FDF3EC]' : ''}
         />
       </div>
       <div>

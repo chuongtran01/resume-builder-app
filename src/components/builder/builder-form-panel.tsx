@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Upload } from 'lucide-react';
 import type { PersonalInfo, SkillCategory } from '@resume-types/resume.types';
 import type { ExperienceEntry, EducationEntry, ProjectEntry, CertificationEntry, SectionId } from '@/types/builder.types';
 import { Button } from '@/components/ui/button';
@@ -27,8 +26,6 @@ export interface BuilderFormPanelProps {
   sectionOpen: Record<string, boolean>;
   hasData: boolean;
   savedVisible: boolean;
-  importJustDone: boolean;
-  onImportClick: () => void;
   onRequestClearAll: () => void;
   toggleSection: (id: SectionId) => void;
   onPersonalChange: (field: string, value: string) => void;
@@ -63,8 +60,6 @@ export function BuilderFormPanel({
   sectionOpen,
   hasData,
   savedVisible,
-  importJustDone,
-  onImportClick,
   onRequestClearAll,
   toggleSection,
   onPersonalChange,
@@ -94,10 +89,6 @@ export function BuilderFormPanel({
       </p>
       <div className="flex items-center justify-between gap-2 mb-4">
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={onImportClick}>
-            <Upload className="h-4 w-4 mr-1.5" />
-            Import Resume
-          </Button>
           {hasData && (
             <Button variant="ghost" size="sm" className="text-foreground/60" onClick={onRequestClearAll}>
               Clear All
@@ -121,7 +112,6 @@ export function BuilderFormPanel({
         <div className="space-y-4 pb-24">
           <ContactSection
             personalInfo={pi}
-            importJustDone={importJustDone}
             open={!!sectionOpen.contact}
             onToggle={() => toggleSection('contact')}
             onChange={onPersonalChange}

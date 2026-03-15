@@ -1,14 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Resume, Experience, Education, Project, Certification, SkillCategory } from '@resume-types/resume.types';
 import type { ExperienceEntry, EducationEntry, ProjectEntry, CertificationEntry, SectionId } from '@/types/builder.types';
 import { DEFAULT_SECTION_OPEN } from '@/types/builder.types';
-import { parseDocument } from '@/utils/documentParser';
 import { generateResume } from '@/lib/api-client';
 import { BuilderFormPanel } from '@/components/builder/builder-form-panel';
 import { ResumePreviewPanel } from '@/components/builder/resume-preview-panel';
@@ -23,7 +20,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
-const IMPORT_STORAGE_KEY = 'imported-resume';
 const DRAFT_STORAGE_KEY = 'resume-builder-draft';
 
 function newExp(): ExperienceEntry {
@@ -110,15 +106,9 @@ function resumeToExportResume(
 }
 
 export default function BuilderPage() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
   const [resume, setResume] = useState<Partial<Resume>>({});
   const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([{ name: 'Skills', items: [] }]);
   const [sectionOpen, setSectionOpen] = useState<Record<string, boolean>>(DEFAULT_SECTION_OPEN);
-  const [showImportDialog, setShowImportDialog] = useState(false);
-  const [importError, setImportError] = useState<string | null>(null);
-  const [importProgress, setImportProgress] = useState(0);
-  const [importJustDone, setImportJustDone] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [savedVisible, setSavedVisible] = useState(false);
   const [isExportingPdf, setIsExportingPdf] = useState(false);
@@ -192,24 +182,6 @@ export default function BuilderPage() {
       } catch (_) {}
     }
   }, []);
-
-  useEffect(() => {
-    const isImported = searchParams.get('imported') === 'true';
-    if (!isImported) return;
-    try {
-      const stored = typeof window !== 'undefined' ? sessionStorage.getItem(IMPORT_STORAGE_KEY) : null;
-      if (stored) {
-        const parsed = JSON.parse(stored) as Partial<Resume>;
-        setResume(parsed);
-        sessionStorage.removeItem(IMPORT_STORAGE_KEY);
-        setImportJustDone(true);
-        setTimeout(() => setImportJustDone(false), 2000);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-    router.replace('/builder');
-  }, [searchParams, router]);
 
   useEffect(() => {
     if (!hasData && !resume.personalInfo && !resume.summary && experience.length === 0) return;
@@ -349,28 +321,6 @@ export default function BuilderPage() {
     setShowClearConfirm(false);
   };
 
-  const handleImportSuccess = (parsed: Partial<Resume>) => {
-    const r = { ...parsed };
-    if (Array.isArray(r.projects)) {
-      (r as { projects: (Project & { id?: string })[] }).projects = r.projects.map((p) => ({
-        ...p,
-        id: (p as ProjectEntry).id ?? crypto.randomUUID(),
-        bulletPoints: p.bulletPoints ?? ((p as unknown as { description?: string }).description ? [(p as unknown as { description: string }).description] : ['']),
-      }));
-    }
-    setResume(r);
-    const skillsSection = parsed.skills;
-    if (skillsSection && typeof skillsSection === 'object' && 'categories' in skillsSection && Array.isArray((skillsSection as { categories: SkillCategory[] }).categories)) {
-      const cats = (skillsSection as { categories: SkillCategory[] }).categories;
-      if (cats.length > 0) setSkillCategories(cats);
-    }
-    setShowImportDialog(false);
-    setImportError(null);
-    setImportProgress(0);
-    setImportJustDone(true);
-    setTimeout(() => setImportJustDone(false), 2000);
-  };
-
   const handleExportPdf = async () => {
     const payload = resumeToExportResume(resume, skillCategories);
     if (!payload.experience?.length) {
@@ -410,8 +360,6 @@ export default function BuilderPage() {
     sectionOpen,
     hasData: Boolean(hasData),
     savedVisible,
-    importJustDone,
-    onImportClick: () => { setShowImportDialog(true); setImportError(null); },
     onRequestClearAll: () => setShowClearConfirm(true),
     toggleSection,
     onPersonalChange: handlePersonal,
@@ -501,53 +449,6 @@ export default function BuilderPage() {
               Clear all
             </Button>
           </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
-        <DialogContent className="max-w-[480px] bg-[#FAF9F6] border-[#D6D0C8]">
-          <DialogHeader>
-            <DialogTitle className="font-serif">Import your resume</DialogTitle>
-            <DialogDescription>We'll extract your information and pre-fill the form.</DialogDescription>
-          </DialogHeader>
-          <div
-            className="border border-dashed border-[#D6D0C8] rounded-sm p-8 text-center cursor-pointer"
-            onClick={() => document.getElementById('import-file-input')?.click()}
-          >
-            <input
-              id="import-file-input"
-              type="file"
-              accept=".pdf,.docx"
-              className="hidden"
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
-                if (!file) return;
-                setImportError(null);
-                setImportProgress(10);
-                try {
-                  const parsed = await parseDocument({
-                    file,
-                    onProgress: setImportProgress,
-                  });
-                  setImportProgress(100);
-                  handleImportSuccess(parsed);
-                } catch (err) {
-                  setImportError(err instanceof Error ? err.message : 'Import failed.');
-                }
-                e.target.value = '';
-              }}
-            />
-            <Upload className="h-10 w-10 mx-auto text-foreground/50 mb-2" />
-            <p className="font-serif text-foreground mb-1">Drop PDF or DOCX here</p>
-            <p className="text-sm font-sans text-foreground/50 mb-1">or click to browse</p>
-            <p className="text-[10px] uppercase tracking-widest font-sans text-foreground/40">PDF or DOCX · Max 10MB</p>
-            {importProgress > 0 && importProgress < 100 && (
-              <div className="mt-4 h-1 bg-foreground/10 rounded-full overflow-hidden">
-                <motion.div className="h-full bg-primary" initial={{ width: 0 }} animate={{ width: `${importProgress}%` }} transition={{ duration: 0.2 }} />
-              </div>
-            )}
-          </div>
-          {importError && <p className="text-sm text-red-600 font-sans">{importError}</p>}
         </DialogContent>
       </Dialog>
     </TooltipProvider>
